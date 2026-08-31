@@ -126,19 +126,19 @@
                 <p>اضغط على الخدمة للتسجيل والاشتراك المباشر بها</p>
             </div>
             <div class="cards-grid">
-                <div class="card" onclick="selectRoleAndScroll('student')">
+                <div class="card" id="card-student">
                     <div class="card-icon"><i class="fa-solid fa-user-tie"></i></div>
                     <h3>إرشاد مشروع التخرج (بالساعة)</h3>
                     <p>جلسات إرشادية وتوجيهية مع خبراء لمساعدة الطالب على بناء مشروعه بنفسه وضمان النزاهة الأكاديمية.</p>
                     <div class="card-action">طلب الخدمة كطالب <i class="fa-solid fa-arrow-left"></i></div>
                 </div>
-                <div class="card" onclick="selectRoleAndScroll('company')">
+                <div class="card" id="card-company">
                     <div class="card-icon"><i class="fa-solid fa-building-user"></i></div>
                     <h3>إدارة التدريب الميداني والتأهيل</h3>
                     <p>منظومة موحدة للشركات لنشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء.</p>
                     <div class="card-action">التسجيل كممثل شركة <i class="fa-solid fa-arrow-left"></i></div>
                 </div>
-                <div class="card" onclick="selectRoleAndScroll('mentor')">
+                <div class="card" id="card-mentor">
                     <div class="card-icon"><i class="fa-solid fa-briefcase"></i></div>
                     <h3>برنامج التمديد المهني (3 أشهر)</h3>
                     <p>ربط الطلاب المتميزين بشركات لتمديد تدريبهم 3 أشهر إضافية لزيادة فرص التوظيف وتقليل مخاطر التوظيف الجديد.</p>
@@ -183,26 +183,28 @@
     </footer>
 
     <script>
-        // وظيفة التوجيه واختيار الفئة تلقائياً عند النقر على الكروت
-        function selectRoleAndScroll(roleValue) {
-            const roleSelect = document.getElementById('role');
-            const nameInput = document.getElementById('fullName');
-            const contactSection = document.getElementById('contact');
-            
-            if (roleSelect) {
-                roleSelect.value = roleValue;
-            }
-            
-            if (contactSection) {
-                contactSection.scrollIntoView({ behavior: 'smooth' });
-            }
-
-            setTimeout(() => {
-                if (nameInput) nameInput.focus();
-            }, 600);
-        }
-
         document.addEventListener("DOMContentLoaded", function () {
+            // ربط الضغط على الكروت بتوجيه الصفحة وتحديد الفئة تلقائياً
+            function bindCardClick(cardId, roleValue) {
+                const card = document.getElementById(cardId);
+                if (card) {
+                    card.addEventListener('click', function () {
+                        const roleSelect = document.getElementById('role');
+                        const nameInput = document.getElementById('fullName');
+                        const contactSection = document.getElementById('contact');
+                        
+                        if (roleSelect) roleSelect.value = roleValue;
+                        if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
+                        setTimeout(() => { if (nameInput) nameInput.focus(); }, 600);
+                    });
+                }
+            }
+
+            bindCardClick('card-student', 'student');
+            bindCardClick('card-company', 'company');
+            bindCardClick('card-mentor', 'mentor');
+
+            // ربط قاعدة البيانات Supabase
             const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_8SQ-JfcbI2uGBstuTps0ow_hNbaNym8';
             
