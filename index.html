@@ -184,7 +184,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // التوجيه التلقائي واختيار الفئة
             function bindCardClick(cardId, roleValue) {
                 const card = document.getElementById(cardId);
                 if (card) {
@@ -204,7 +203,6 @@
             bindCardClick('card-company', 'company');
             bindCardClick('card-mentor', 'mentor');
 
-            // إعدادات قاعدة البيانات Supabase
             const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_8SQ-JfcbI2uGBstuTps0ow_hNbaNym8';
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -228,42 +226,23 @@
                 responseMsg.innerText = 'جاري الإرسال...';
 
                 try {
-                    // 1. الحفظ في Supabase
                     const { data, error } = await supabase
                         .from('registrations')
                         .insert([{ full_name: fullName, email: email, role: role }]);
 
-                    if (error) console.error("Supabase Error:", error);
-
-                    // 2. إرسال الإيميل المباشر
-                    await fetch("https://api.web3forms.com/submit", {
-                        method: "POST",
-                        headers: { 
-                            "Content-Type": "application/json",
-                            "Accept": "application/json"
-                        },
-                        body: JSON.stringify({
-                            access_key: "3d508920-56ff-4cb9-9bd2-be9182310ee9",
-                            subject: "تسجيل جديد في منصة Path Engineering!",
-                            from_name: "Path Engineering System",
-                            to_email: "ynes.rwn@gmail.com",
-                            name: fullName,
-                            email: email,
-                            role: role,
-                            message: `وصلك تسجيل جديد عبر الموقع:\n\nالاسم: ${fullName}\nالإيميل: ${email}\nالفئة: ${role}`
-                        })
-                    });
+                    if (error) throw error;
 
                     responseMsg.style.color = 'green';
                     responseMsg.innerText = '✅ تم تسجيل بياناتك بنجاح!';
-                    alert('تم التسجيل بنجاح!');
                     form.reset();
                 } catch (err) {
-                    console.error('Error:', err);
-                    responseMsg.style.color = 'green';
-                    responseMsg.innerText = '✅ تم تسجيل بياناتك بنجاح!';
-                    alert('تم التسجيل بنجاح!');
-                    form.reset();
+                    console.error('Registration Error:', err);
+                    responseMsg.style.color = 'red';
+                    if (err.code === '23505' || (err.message && err.message.includes('duplicate'))) {
+                        responseMsg.innerText = '⚠️ هذا البريد الإلكتروني مسجل مسبقاً.';
+                    } else {
+                        responseMsg.innerText = '❌ حدث خطأ، يرجى المحاولة لاحقاً.';
+                    }
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.innerText = 'إرسال البيانات';
