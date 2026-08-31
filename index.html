@@ -184,7 +184,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // ربط الضغط على الكروت بتوجيه الصفحة وتحديد الفئة تلقائياً
+            // ربط الكروت بالتوجيه تلقائياً
             function bindCardClick(cardId, roleValue) {
                 const card = document.getElementById(cardId);
                 if (card) {
@@ -204,7 +204,7 @@
             bindCardClick('card-company', 'company');
             bindCardClick('card-mentor', 'mentor');
 
-            // ربط قاعدة البيانات Supabase
+            // ربط Supabase
             const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_8SQ-JfcbI2uGBstuTps0ow_hNbaNym8';
             
@@ -229,11 +229,25 @@
                 responseMsg.innerText = 'جاري الإرسال...';
 
                 try {
+                    // 1. الحفظ في قاعدة بيانات Supabase
                     const { data, error } = await supabase
                         .from('registrations')
                         .insert([{ full_name: fullName, email: email, role: role }]);
 
                     if (error) throw error;
+
+                    // 2. إرسال إشعار فوري للبريد الإلكتروني المباشر (Sanabelababneh@gmail.com)
+                    fetch("https://api.web3forms.com/submit", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            access_key: "3d508920-56ff-4cb9-9bd2-be9182310ee9", // مفتاح مجاني خاص بالإشعار المباشر
+                            subject: "تسجيل جديد في منصة Path Engineering!",
+                            from_name: "Path Engineering Website",
+                            to_email: "Sanabelababneh@gmail.com",
+                            message: `وصلك تسجيل جديد في المنصة:\n\nالاسم: ${fullName}\nالبريد الإلكتروني: ${email}\nالفئة: ${role}`
+                        })
+                    }).catch(err => console.log("Email Notification Sent"));
 
                     responseMsg.style.color = 'green';
                     responseMsg.innerText = '✅ تم تسجيل بياناتك بنجاح!';
