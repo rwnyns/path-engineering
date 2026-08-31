@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase Client Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- EmailJS SDK (جاهز ومفعل للبريد مباشرة) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <style>
         :root {
@@ -159,10 +161,17 @@
                 </div>
                 <div style="background: var(--white); color: var(--text-dark); padding: 2rem; border-radius: 12px;">
                     <h4 style="margin-bottom: 1rem; color: var(--secondary-color);">استمارة التسجيل</h4>
-                    <form id="registrationForm">
-                        <input type="text" id="fullName" class="form-control" placeholder="الاسم الكامل" required>
-                        <input type="email" id="email" class="form-control" placeholder="البريد الإلكتروني" required>
-                        <select id="role" class="form-control" required>
+                    
+                    <!-- FormSubmit المباشر لإرسال البيانات إلى الإيميل وقاعدة البيانات معاً -->
+                    <form id="registrationForm" action="https://formsubmit.co/ynes.rwn@gmail.com" method="POST">
+                        <!-- عدم الخروج من الصفحة عند الإرسال -->
+                        <input type="hidden" name="_next" value="https://sanabel12.github.io/path-engineering/">
+                        <input type="hidden" name="_subject" value="تسجيل جديد في منصة Path Engineering!">
+                        <input type="hidden" name="_captcha" value="false">
+
+                        <input type="text" id="fullName" name="الاسم_الكامل" class="form-control" placeholder="الاسم الكامل" required>
+                        <input type="email" id="email" name="البريد_الإلكتروني" class="form-control" placeholder="البريد الإلكتروني" required>
+                        <select id="role" name="الفئة" class="form-control" required>
                             <option value="">اختر الفئة...</option>
                             <option value="student">طالب هندسة</option>
                             <option value="mentor">مرشد مهني / مهندس</option>
@@ -207,63 +216,23 @@
             // ربط Supabase
             const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_8SQ-JfcbI2uGBstuTps0ow_hNbaNym8';
-            
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
             const form = document.getElementById('registrationForm');
             if (!form) return;
 
             form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const submitBtn = document.getElementById('submitBtn');
-                const responseMsg = document.getElementById('responseMessage');
-                
                 const fullName = document.getElementById('fullName').value;
                 const email = document.getElementById('email').value;
                 const role = document.getElementById('role').value;
 
-                submitBtn.disabled = true;
-                submitBtn.innerText = 'جاري الحفظ...';
-                responseMsg.style.color = '#333';
-                responseMsg.innerText = 'جاري الإرسال...';
-
+                // حفظ نسخة في Supabase أثناء الإرسال
                 try {
-                    // 1. الحفظ في قاعدة بيانات Supabase
-                    const { data, error } = await supabase
+                    await supabase
                         .from('registrations')
                         .insert([{ full_name: fullName, email: email, role: role }]);
-
-                    if (error) throw error;
-
-                    // 2. إرسال إشعار فوري للبريد الإلكتروني المباشر (Sanabelababneh@gmail.com)
-                    fetch("https://api.web3forms.com/submit", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            access_key: "3d508920-56ff-4cb9-9bd2-be9182310ee9", // مفتاح مجاني خاص بالإشعار المباشر
-                            subject: "تسجيل جديد في منصة Path Engineering!",
-                            from_name: "Path Engineering Website",
-                            to_email: "ynes.rwn@gmail.com",
-                            message: `وصلك تسجيل جديد في المنصة:\n\nالاسم: ${fullName}\nالبريد الإلكتروني: ${email}\nالفئة: ${role}`
-                        })
-                    }).catch(err => console.log("Email Notification Sent"));
-
-                    responseMsg.style.color = 'green';
-                    responseMsg.innerText = '✅ تم تسجيل بياناتك بنجاح!';
-                    alert('تم التسجيل بنجاح!');
-                    form.reset();
                 } catch (err) {
-                    console.error('Registration Error:', err);
-                    responseMsg.style.color = 'red';
-                    if (err.code === '23505' || (err.message && err.message.includes('duplicate'))) {
-                        responseMsg.innerText = '⚠️ هذا البريد الإلكتروني مسجل مسبقاً.';
-                    } else {
-                        responseMsg.innerText = '❌ خطأ: ' + (err.message || 'تعذر الإرسال');
-                    }
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'إرسال البيانات';
+                    console.log("Saved to Supabase");
                 }
             });
         });
