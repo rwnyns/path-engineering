@@ -53,9 +53,32 @@
         .section-title h2 { font-size: 2.2rem; color: var(--secondary-color); margin-bottom: 0.5rem; }
 
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .card { background: var(--white); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: var(--transition); }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
+        .card { 
+            background: var(--white); 
+            padding: 2rem; 
+            border-radius: 12px; 
+            box-shadow: var(--shadow); 
+            border: 1px solid var(--border-color); 
+            transition: var(--transition); 
+            cursor: pointer;
+            position: relative;
+        }
+        .card:hover { 
+            transform: translateY(-8px); 
+            border-color: var(--primary-color); 
+            box-shadow: 0 15px 30px -10px rgba(23, 133, 116, 0.15);
+        }
         .card-icon { width: 60px; height: 60px; border-radius: 12px; background: rgba(23, 133, 116, 0.1); color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem; }
+        
+        .card-action {
+            margin-top: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
         .contact-card { background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%); color: var(--white); border-radius: 16px; padding: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
         .form-control { width: 100%; padding: 0.8rem; margin-bottom: 0.8rem; border-radius: 6px; border: 1px solid var(--border-color); font-size: 1rem; }
@@ -100,23 +123,26 @@
         <div class="container">
             <div class="section-title">
                 <h2>خدمات المنصة الرئيسية</h2>
-                <p>حلول متكاملة تضمن تجربة نموذجية ترفع جاهزية المهندسين الجدد</p>
+                <p>اضغط على الخدمة للتسجيل والاشتراك المباشر بها</p>
             </div>
             <div class="cards-grid">
-                <div class="card">
+                <div class="card" onclick="selectRoleAndScroll('student')">
                     <div class="card-icon"><i class="fa-solid fa-user-tie"></i></div>
                     <h3>إرشاد مشروع التخرج (بالساعة)</h3>
                     <p>جلسات إرشادية وتوجيهية مع خبراء لمساعدة الطالب على بناء مشروعه بنفسه وضمان النزاهة الأكاديمية.</p>
+                    <div class="card-action">طلب الخدمة كطالب <i class="fa-solid fa-arrow-left"></i></div>
                 </div>
-                <div class="card">
+                <div class="card" onclick="selectRoleAndScroll('company')">
                     <div class="card-icon"><i class="fa-solid fa-building-user"></i></div>
                     <h3>إدارة التدريب الميداني والتأهيل</h3>
                     <p>منظومة موحدة للشركات لنشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء.</p>
+                    <div class="card-action">التسجيل كممثل شركة <i class="fa-solid fa-arrow-left"></i></div>
                 </div>
-                <div class="card">
+                <div class="card" onclick="selectRoleAndScroll('mentor')">
                     <div class="card-icon"><i class="fa-solid fa-briefcase"></i></div>
                     <h3>برنامج التمديد المهني (3 أشهر)</h3>
                     <p>ربط الطلاب المتميزين بشركات لتمديد تدريبهم 3 أشهر إضافية لزيادة فرص التوظيف وتقليل مخاطر التوظيف الجديد.</p>
+                    <div class="card-action">الانضمام كمرشد/مهندس <i class="fa-solid fa-arrow-left"></i></div>
                 </div>
             </div>
         </div>
@@ -157,6 +183,25 @@
     </footer>
 
     <script>
+        // وظيفة التوجيه واختيار الفئة تلقائياً عند النقر على الكروت
+        function selectRoleAndScroll(roleValue) {
+            const roleSelect = document.getElementById('role');
+            const nameInput = document.getElementById('fullName');
+            const contactSection = document.getElementById('contact');
+            
+            if (roleSelect) {
+                roleSelect.value = roleValue;
+            }
+            
+            if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            setTimeout(() => {
+                if (nameInput) nameInput.focus();
+            }, 600);
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_8SQ-JfcbI2uGBstuTps0ow_hNbaNym8';
