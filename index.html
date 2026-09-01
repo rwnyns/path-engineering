@@ -42,6 +42,7 @@
         .btn { display: inline-block; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; text-decoration: none; transition: var(--transition); cursor: pointer; border: none; }
         .btn-primary { background-color: var(--primary-color); color: var(--white); }
         .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .btn-secondary { background-color: var(--secondary-color); color: var(--white); }
 
         .hero { padding: 5rem 0 3rem; background: linear-gradient(135deg, rgba(23, 133, 116, 0.05) 0%, rgba(15, 56, 70, 0.05) 100%); border-bottom: 1px solid var(--border-color); }
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
@@ -61,7 +62,6 @@
             border: 1px solid var(--border-color); 
             transition: var(--transition); 
             cursor: pointer;
-            position: relative;
         }
         .card:hover { 
             transform: translateY(-8px); 
@@ -80,8 +80,25 @@
             gap: 8px;
         }
 
-        .contact-card { background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%); color: var(--white); border-radius: 16px; padding: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
-        .form-control { width: 100%; padding: 0.8rem; margin-bottom: 0.8rem; border-radius: 6px; border: 1px solid var(--border-color); font-size: 1rem; }
+        .contact-card { background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%); color: var(--white); border-radius: 16px; padding: 3rem; display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; align-items: start; }
+        .form-control { width: 100%; padding: 0.8rem; margin-bottom: 0.8rem; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.95rem; }
+        
+        .dynamic-fields {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            border: 1px dashed var(--primary-color);
+        }
+
+        .otp-box {
+            display: none;
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+        }
 
         footer { background: var(--secondary-color); color: var(--white); padding: 2rem 0; text-align: center; }
         @media (max-width: 768px) { .hero-grid, .contact-card { grid-template-columns: 1fr; } .nav-links { display: none; } }
@@ -152,25 +169,45 @@
         <div class="container">
             <div class="contact-card">
                 <div>
-                    <h3>سجل اهتمامك في المنصة</h3>
-                    <p style="margin-bottom: 1.5rem; opacity: 0.9;">مدير المشروع: سنابل عبدالله علي بني إسماعيل</p>
+                    <h3>استمارة التسجيل والاستبيان</h3>
+                    <p style="margin-bottom: 1.5rem; opacity: 0.9;">يرجى تزويدنا بالمعلومات الدقيقة لتقديم أفضل خدمة.</p>
+                    <p style="margin-bottom: 0.5rem;"><i class="fa-solid fa-user"></i> مدير المشروع: سنابل بني إسماعيل</p>
                     <p style="margin-bottom: 0.5rem;"><i class="fa-solid fa-phone"></i> 0790800487</p>
                     <p><i class="fa-solid fa-envelope"></i> Sanabelababneh@gmail.com</p>
                 </div>
+                
                 <div style="background: var(--white); color: var(--text-dark); padding: 2rem; border-radius: 12px;">
-                    <h4 style="margin-bottom: 1rem; color: var(--secondary-color);">استمارة التسجيل</h4>
+                    <!-- Form Phase 1: Main Form -->
                     <form id="registrationForm">
-                        <input type="text" id="fullName" class="form-control" placeholder="الاسم الكامل" required>
-                        <input type="email" id="email" class="form-control" placeholder="البريد الإلكتروني" required>
+                        <input type="text" id="fullName" class="form-control" placeholder="الاسم الكامل *" required>
+                        <input type="email" id="email" class="form-control" placeholder="البريد الإلكتروني الرسمي *" required>
+                        <input type="tel" id="phone" class="form-control" placeholder="رقم الهاتف (مثال: 0791234567) *" required pattern="[0-9]{10}">
+                        <input type="text" id="location" class="form-control" placeholder="مكان الإقامة (المدينة/المحافظة) *" required>
+                        
                         <select id="role" class="form-control" required>
-                            <option value="">اختر الفئة...</option>
+                            <option value="">اختر الفئة *</option>
                             <option value="student">طالب هندسة</option>
-                            <option value="mentor">مرشد مهني / مهندس</option>
-                            <option value="company">ممثل شركة</option>
+                            <option value="mentor">مرشد مهني / مهندس خبير</option>
+                            <option value="company">ممثل شركة / مؤسسة</option>
                         </select>
-                        <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%;">إرسال البيانات</button>
+
+                        <!-- Dynamic Survey Fields -->
+                        <div id="surveyFields" class="dynamic-fields" style="display: none;">
+                            <!-- Will be dynamically populated based on role -->
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%;">إرسال رمز التفعيل للإيميل</button>
                     </form>
-                    <div id="responseMessage" style="margin-top: 10px; font-weight: bold; text-align: center;"></div>
+
+                    <!-- Form Phase 2: OTP Verification Box -->
+                    <div id="otpBox" class="otp-box">
+                        <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">تم إرسال كود التأكيد</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">يرجى فحص بريدك الإلكتروني وإدخال رمز الـ OTP المكون من 6 أرقام لتأكيد الطلب.</p>
+                        <input type="text" id="otpCode" class="form-control" placeholder="أدخل الرمز هنا (6 أرقام)" maxlength="6" style="text-align: center; font-size: 1.2rem; letter-spacing: 4px;">
+                        <button type="button" id="verifyOtpBtn" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">تأكيد وحفظ التسجيل</button>
+                    </div>
+
+                    <div id="responseMessage" style="margin-top: 10px; font-weight: bold; text-align: center; font-size: 0.9rem;"></div>
                 </div>
             </div>
         </div>
@@ -184,68 +221,177 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            function bindCardClick(cardId, roleValue) {
-                const card = document.getElementById(cardId);
-                if (card) {
-                    card.addEventListener('click', function () {
-                        const roleSelect = document.getElementById('role');
-                        const nameInput = document.getElementById('fullName');
-                        const contactSection = document.getElementById('contact');
-                        
-                        if (roleSelect) roleSelect.value = roleValue;
-                        if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
-                        setTimeout(() => { if (nameInput) nameInput.focus(); }, 600);
-                    });
-                }
-            }
-
-            bindCardClick('card-student', 'student');
-            bindCardClick('card-company', 'company');
-            bindCardClick('card-mentor', 'mentor');
-
             const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_8SQ-JfcbI2uGBstuTps0ow_hNbaNym8';
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            const form = document.getElementById('registrationForm');
-            if (!form) return;
+            const roleSelect = document.getElementById('role');
+            const surveyFields = document.getElementById('surveyFields');
+            const registrationForm = document.getElementById('registrationForm');
+            const otpBox = document.getElementById('otpBox');
+            const responseMsg = document.getElementById('responseMessage');
 
-            form.addEventListener('submit', async function(e) {
+            let tempFormData = {};
+
+            // Render Dynamic Survey Fields based on selected role
+            roleSelect.addEventListener('change', function () {
+                const role = this.value;
+                surveyFields.innerHTML = '';
+                
+                if (role === 'student') {
+                    surveyFields.style.display = 'block';
+                    surveyFields.innerHTML = `
+                        <input type="text" id="university" class="form-control" placeholder="اسم الجامعة *" required>
+                        <input type="text" id="major" class="form-control" placeholder="التخصص الهندسي الدقيق *" required>
+                        <input type="text" id="graduationYear" class="form-control" placeholder="سنة التخرج المتوقعة *" required>
+                        <input type="text" id="projectTitle" class="form-control" placeholder="عنوان/مجال مشروع التخرج المرتقب">
+                    `;
+                } else if (role === 'company') {
+                    surveyFields.style.display = 'block';
+                    surveyFields.innerHTML = `
+                        <input type="text" id="companyName" class="form-control" placeholder="اسم الشركة / المؤسسة *" required>
+                        <input type="text" id="jobTitle" class="form-control" placeholder="المسمى الوظيفي للممثل *" required>
+                        <input type="number" id="trainOpportunities" class="form-control" placeholder="عدد فرص التدريب المتاحة سنوياً">
+                    `;
+                } else if (role === 'mentor') {
+                    surveyFields.style.display = 'block';
+                    surveyFields.innerHTML = `
+                        <input type="text" id="expertise" class="form-control" placeholder="مجال الخبرة والتخصص الدقيق *" required>
+                        <input type="number" id="yearsExp" class="form-control" placeholder="عدد سنوات الخبرة *" required>
+                    `;
+                } else {
+                    surveyFields.style.display = 'none';
+                }
+            });
+
+            // Card Click Handling
+            function bindCardClick(cardId, roleValue) {
+                const card = document.getElementById(cardId);
+                if (card) {
+                    card.addEventListener('click', function () {
+                        roleSelect.value = roleValue;
+                        roleSelect.dispatchEvent(new Event('change'));
+                        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+                        setTimeout(() => { document.getElementById('fullName').focus(); }, 600);
+                    });
+                }
+            }
+            bindCardClick('card-student', 'student');
+            bindCardClick('card-company', 'company');
+            bindCardClick('card-mentor', 'mentor');
+
+            // Phase 1: Send OTP to Email
+            registrationForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                const submitBtn = document.getElementById('submitBtn');
-                const responseMsg = document.getElementById('responseMessage');
-                
-                const fullName = document.getElementById('fullName').value;
                 const email = document.getElementById('email').value;
-                const role = document.getElementById('role').value;
+                const submitBtn = document.getElementById('submitBtn');
+
+                // Collect main and survey details into temp object
+                tempFormData = {
+                    full_name: document.getElementById('fullName').value,
+                    email: email,
+                    phone: document.getElementById('phone').value,
+                    location: document.getElementById('location').value,
+                    role: roleSelect.value,
+                    survey_details: {}
+                };
+
+                if (tempFormData.role === 'student') {
+                    tempFormData.survey_details = {
+                        university: document.getElementById('university')?.value,
+                        major: document.getElementById('major')?.value,
+                        graduation_year: document.getElementById('graduationYear')?.value,
+                        project_title: document.getElementById('projectTitle')?.value
+                    };
+                } else if (tempFormData.role === 'company') {
+                    tempFormData.survey_details = {
+                        company_name: document.getElementById('companyName')?.value,
+                        job_title: document.getElementById('jobTitle')?.value,
+                        training_opportunities: document.getElementById('trainOpportunities')?.value
+                    };
+                } else if (tempFormData.role === 'mentor') {
+                    tempFormData.survey_details = {
+                        expertise: document.getElementById('expertise')?.value,
+                        years_experience: document.getElementById('yearsExp')?.value
+                    };
+                }
 
                 submitBtn.disabled = true;
-                submitBtn.innerText = 'جاري الحفظ...';
+                submitBtn.innerText = 'جاري إرسال الرمز...';
                 responseMsg.style.color = '#333';
-                responseMsg.innerText = 'جاري الإرسال...';
+                responseMsg.innerText = 'جاري إرسال رمز التفعيل إلى بريدك...';
 
                 try {
-                    const { data, error } = await supabase
-                        .from('registrations')
-                        .insert([{ full_name: fullName, email: email, role: role }]);
+                    // Send OTP email using Supabase Auth
+                    const { error } = await supabase.auth.signInWithOtp({
+                        email: email
+                    });
 
                     if (error) throw error;
 
+                    registrationForm.style.display = 'none';
+                    otpBox.style.display = 'block';
                     responseMsg.style.color = 'green';
-                    responseMsg.innerText = '✅ تم تسجيل بياناتك بنجاح!';
-                    form.reset();
+                    responseMsg.innerText = '✉️ أُرسل كود التفعيل بنجاح! تفقد إيميلك.';
+
                 } catch (err) {
-                    console.error('Registration Error:', err);
+                    console.error('OTP Send Error:', err);
                     responseMsg.style.color = 'red';
-                    if (err.code === '23505' || (err.message && err.message.includes('duplicate'))) {
-                        responseMsg.innerText = '⚠️ هذا البريد الإلكتروني مسجل مسبقاً.';
-                    } else {
-                        responseMsg.innerText = '❌ حدث خطأ، يرجى المحاولة لاحقاً.';
-                    }
-                } finally {
+                    responseMsg.innerText = '❌ فشل إرسال الرمز، تأكد من صحة البريد الإلكتروني.';
                     submitBtn.disabled = false;
-                    submitBtn.innerText = 'إرسال البيانات';
+                    submitBtn.innerText = 'إرسال رمز التفعيل للإيميل';
+                }
+            });
+
+            // Phase 2: Verify OTP and Save Data
+            document.getElementById('verifyOtpBtn').addEventListener('click', async function() {
+                const token = document.getElementById('otpCode').value.trim();
+                const verifyBtn = this;
+
+                if (!token || token.length < 6) {
+                    responseMsg.style.color = 'red';
+                    responseMsg.innerText = '⚠️ يرجى أدخال كود التفعيل المكون من 6 أرقام.';
+                    return;
+                }
+
+                verifyBtn.disabled = true;
+                verifyBtn.innerText = 'جاري التأكيد الحفظ...';
+
+                try {
+                    // Verify OTP Code
+                    const { data: authData, error: authError } = await supabase.auth.verifyOtp({
+                        email: tempFormData.email,
+                        token: token,
+                        type: 'email'
+                    });
+
+                    if (authError) throw authError;
+
+                    // Insert Complete Survey & Personal Data into 'registrations' table
+                    const { error: dbError } = await supabase
+                        .from('registrations')
+                        .insert([{
+                            full_name: tempFormData.full_name,
+                            email: tempFormData.email,
+                            phone: tempFormData.phone,
+                            location: tempFormData.location,
+                            role: tempFormData.role,
+                            survey_details: tempFormData.survey_details
+                        }]);
+
+                    if (dbError) throw dbError;
+
+                    otpBox.style.display = 'none';
+                    responseMsg.style.color = 'green';
+                    responseMsg.innerText = '✅ تم التحقق من إيميلك وحفظ بيانات الاستبيان بنجاح!';
+                    
+                } catch (err) {
+                    console.error('Verification/Save Error:', err);
+                    responseMsg.style.color = 'red';
+                    responseMsg.innerText = '❌ كود التفعيل غير صحيح أو انتهت صلاحيته.';
+                    verifyBtn.disabled = false;
+                    verifyBtn.innerText = 'تأكيد وحفظ التسجيل';
                 }
             });
         });
