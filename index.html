@@ -3,9 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Path Engineering — الشكل الجديد</title>
+<title>Path Engineering | جسر مهندسي المستقبل</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- 1. استدعاء مكتبة Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
   :root{
     --primary:#123B32;
@@ -68,22 +72,17 @@
   .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 26px -10px rgba(47,143,114,.6); }
   .btn-outline{ background:transparent; color:var(--primary); border:1.5px solid var(--primary); }
   .btn-outline:hover{ background:var(--primary); color:var(--white); }
-  .btn-ghost-light{ background:transparent; color:var(--white); border:1.5px solid rgba(255,255,255,.5); }
-  .btn-ghost-light:hover{ background:rgba(255,255,255,.12); border-color:var(--white); }
   .nav-cta{ display:flex; align-items:center; gap:16px; }
-  .burger{ display:none; }
 
   /* ---------------- HERO ---------------- */
   .hero{ padding:76px 0 60px; }
   .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; }
-  .eyebrow-free{ font-size:14px; color:var(--mint); font-weight:700; margin-bottom:14px; }
   .hero h1{ font-size:44px; line-height:1.28; font-weight:800; color:var(--primary); margin-bottom:20px; }
   .hero p.lede{ font-size:17px; color:var(--muted); max-width:46ch; margin-bottom:32px; }
   .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
 
   /* path visual */
   .path-visual{ position:relative; }
-  .path-visual svg{ width:100%; height:auto; }
   .path-node{ display:flex; align-items:center; gap:14px; }
   .path-node .dot{
     width:46px; height:46px; border-radius:50%; flex:none;
@@ -100,7 +99,7 @@
   .section-head h2{ font-size:32px; color:var(--primary); font-weight:800; margin-bottom:12px; }
   .section-head p{ color:var(--muted); font-size:16px; }
 
-  /* ---------------- SERVICES (row list, not identical cards) ---------------- */
+  /* ---------------- SERVICES ---------------- */
   .service-row{
     display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:32px;
     padding:36px 0; border-top:1px solid var(--line);
@@ -125,8 +124,6 @@
   .service-link{
     display:flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--primary);
   }
-  .service-link svg{ transition:transform .18s ease; }
-  .service-row:hover .service-link svg{ transform:translateX(-4px); }
 
   /* ---------------- WHY-US GRID ---------------- */
   .why-section{ background:var(--white); }
@@ -145,7 +142,7 @@
   .why-card h3{ font-family:'Tajawal',sans-serif; font-weight:700; font-size:16.5px; color:var(--ink); margin-bottom:10px; line-height:1.5; }
   .why-card p{ font-size:13.8px; color:var(--muted); }
 
-  /* ---------------- REGISTRATION STEPPER ---------------- */
+  /* ---------------- REGISTRATION STEPPER & INPUTS ---------------- */
   .register-panel{
     background:var(--white); border:1px solid var(--line); border-radius:var(--radius-lg);
     padding:44px; box-shadow:0 30px 60px -40px rgba(18,59,50,.35);
@@ -167,16 +164,29 @@
   .step-panel{ display:none; }
   .step-panel.active{ display:block; }
   .step-panel h4{ font-family:'Cairo',sans-serif; font-size:19px; color:var(--primary); margin-bottom:14px; }
-  .fake-field{
+
+  /* حقول الإدخال الحقيقية (Real Form Inputs) */
+  .real-input{
+    width:100%;
     height:48px; border:1.5px solid var(--line); border-radius:10px; background:var(--bg);
-    display:flex; align-items:center; padding:0 16px; color:var(--muted); font-size:13.5px; margin-bottom:14px;
+    padding:0 16px; color:var(--ink); font-family:'Tajawal', sans-serif; font-size:14px; margin-bottom:14px;
+    transition:border-color .2s ease, background .2s ease;
   }
+  .real-input:focus{ outline:none; border-color:var(--mint); background:var(--white); }
+
   .type-choice{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
   .type-choice .opt{
     border:1.5px solid var(--line); border-radius:12px; padding:16px 10px; text-align:center; font-size:13.5px; font-weight:700; color:var(--ink);
     transition:all .15s ease; cursor:pointer;
   }
   .type-choice .opt.picked{ border-color:var(--mint); background:rgba(47,143,114,.08); color:var(--primary); }
+
+  /* رسائل الحالة (النجاح والخطأ) */
+  .form-status{
+    margin-top:16px; padding:12px; border-radius:10px; font-size:14px; font-weight:700; text-align:center; display:none;
+  }
+  .form-status.success{ background:#E6F4EA; color:#137333; display:block; }
+  .form-status.error{ background:#FCE8E6; color:#C5221F; display:block; }
 
   /* ---------------- FOOTER ---------------- */
   footer{ background:var(--primary-2); color:var(--white); padding:64px 0 28px; }
@@ -190,7 +200,7 @@
   footer a:hover{ color:var(--gold); }
   .footer-bottom{ border-top:1px solid rgba(255,255,255,.12); padding-top:22px; text-align:center; font-size:12.5px; color:#93A9A2; }
 
-  /* ---------------- RESPONSIVE ---------------- */
+  /* RESPONSIVE */
   @media (max-width:880px){
     .nav-links{ display:none; }
     .hero-grid{ grid-template-columns:1fr; }
@@ -202,11 +212,6 @@
     .type-choice{ grid-template-columns:1fr; }
     .stepper span.t{ display:none; }
   }
-
-  @media (prefers-reduced-motion:no-preference){
-    .reveal{ opacity:0; transform:translateY(16px); animation:up .7s ease forwards; }
-  }
-  @keyframes up{ to{ opacity:1; transform:none; } }
 </style>
 </head>
 <body>
@@ -228,7 +233,7 @@
       <li><a href="#footer">تواصل معنا</a></li>
     </ul>
     <div class="nav-cta">
-      <button class="btn btn-primary">انضم إلينا</button>
+      <a href="#register" class="btn btn-primary">انضم إلينا</a>
     </div>
   </nav>
 </header>
@@ -239,7 +244,7 @@
       <h1>من التدريب الجامعي<br>إلى الوظيفة الحقيقية</h1>
       <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي بمنظومة واحدة.</p>
       <div class="hero-actions">
-        <button class="btn btn-primary">سجل الآن</button>
+        <a href="#register" class="btn btn-primary">سجل الآن</a>
         <a href="#services" class="btn btn-outline">تعرف على الخدمات</a>
       </div>
     </div>
@@ -304,30 +309,6 @@
         <h3>جسر مباشر من التدريب إلى التوظيف الفعلي</h3>
         <p>الطلاب المتميزين ما بضلوا ينتظروا "خبرة عملية" وهمية — برنامج التمديد المهني بيربطهم مباشرة بشركات جاهزة توظفهم.</p>
       </div>
-
-      <div class="why-card">
-        <div class="why-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </div>
-        <h3>متابعة وتقييم يوثّق تقدمك أول بأول</h3>
-        <p>الشركات بتقدر تراقب أداء المتدرب بمهام واضحة واختبارات دورية، والطالب بيشوف تقدمه بنفس اللحظة بدل ما يتفاجئ بتقييم آخر السنة.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="#fff" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </div>
-        <h3>وقتك إلك — جلسات إرشاد حسب جدولك</h3>
-        <p>ما في التزام بمواعيد ثابتة تصادم محاضراتك. تقدر تحجز جلسة الإرشاد بالوقت يلي يناسبك، وتشتغل على مشروعك براحتك.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 21V9l9-6 9 6v12" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke="#fff" stroke-width="1.8"/></svg>
-        </div>
-        <h3>للشركات: منظومة واحدة بدل ملفات متفرقة</h3>
-        <p>نشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء — كله بمكان واحد، بدون إيميلات وملفات إكسل مبعثرة.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -349,7 +330,7 @@
       </div>
       <div class="service-meta">
         <span class="badge">للشركات</span>
-        <a class="service-link" href="#">التسجيل كممثل شركة <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="service-link" href="#register">التسجيل كممثل شركة</a>
       </div>
     </div>
 
@@ -363,7 +344,7 @@
       </div>
       <div class="service-meta">
         <span class="badge">بالساعة</span>
-        <a class="service-link" href="#register">طلب الخدمة كطالب <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="service-link" href="#register">طلب الخدمة كطالب</a>
       </div>
     </div>
 
@@ -377,53 +358,78 @@
       </div>
       <div class="service-meta">
         <span class="badge">3 أشهر</span>
-        <a class="service-link" href="#register">الانضمام كمرشد/مهندس <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="service-link" href="#register">الانضمام كمرشد/مهندس</a>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ---------------- REGISTRATION FORM ---------------- -->
 <section class="section" id="register">
   <div class="wrap">
     <div class="section-head">
       <h2>استمارة التسجيل والاستبيان</h2>
-      <p>يرجى تزويدنا بالمعلومات الدقيقة لتقديم أفضل خدمة — العملية مقسّمة الآن على أربع خطوات بسيطة.</p>
+      <p>يرجى تزويدنا بالمعلومات الدقيقة لتقديم أفضل خدمة — العملية مقسّمة على أربع خطوات بسيطة.</p>
     </div>
 
     <div class="register-panel">
       <div class="stepper">
-        <button class="step active" data-step="1"><span class="num">١</span><span class="t">نوع الحساب</span></button>
-        <button class="step" data-step="2"><span class="num">٢</span><span class="t">البيانات الأساسية</span></button>
-        <button class="step" data-step="3"><span class="num">٣</span><span class="t">تفاصيل إضافية</span></button>
-        <button class="step" data-step="4"><span class="num">٤</span><span class="t">تأكيد وإرسال</span></button>
+        <button type="button" class="step active" data-step="1"><span class="num">١</span><span class="t">نوع الحساب</span></button>
+        <button type="button" class="step" data-step="2"><span class="num">٢</span><span class="t">البيانات الأساسية</span></button>
+        <button type="button" class="step" data-step="3"><span class="num">٣</span><span class="t">تفاصيل إضافية</span></button>
+        <button type="button" class="step" data-step="4"><span class="num">٤</span><span class="t">تأكيد وإرسال</span></button>
       </div>
 
-      <div class="step-panels">
-        <div class="step-panel active" data-panel="1">
-          <h4>ما هو نوع حسابك؟</h4>
-          <div class="type-choice">
-            <div class="opt picked">طالب</div>
-            <div class="opt">شركة</div>
-            <div class="opt">مرشد / مهندس</div>
+      <form id="registrationForm">
+        <div class="step-panels">
+          <!-- الخطوة 1 -->
+          <div class="step-panel active" data-panel="1">
+            <h4>ما هو نوع حسابك؟</h4>
+            <div class="type-choice">
+              <div class="opt picked" data-type="طالب">طالب</div>
+              <div class="opt" data-type="شركة">شركة</div>
+              <div class="opt" data-type="مرشد / مهندس">مرشد / مهندس</div>
+            </div>
+            <input type="hidden" id="account_type" value="طالب">
+            <button type="button" class="btn btn-primary" style="margin-top:20px;" onclick="goToStep(2)">التالي: البيانات الأساسية</button>
+          </div>
+
+          <!-- الخطوة 2 -->
+          <div class="step-panel" data-panel="2">
+            <h4>البيانات الأساسية</h4>
+            <input type="text" id="full_name" class="real-input" placeholder="الاسم الكامل *" required>
+            <input type="email" id="email" class="real-input" placeholder="البريد الإلكتروني الرسمي *" required>
+            <input type="tel" id="phone" class="real-input" placeholder="رقم الهاتف (مثال: 0791234567) *" required>
+            <div style="display:flex; gap:10px;">
+              <button type="button" class="btn btn-outline" onclick="goToStep(1)">السابق</button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(3)">التالي: تفاصيل إضافية</button>
+            </div>
+          </div>
+
+          <!-- الخطوة 3 -->
+          <div class="step-panel" data-panel="3">
+            <h4>تفاصيل إضافية</h4>
+            <input type="text" id="city" class="real-input" placeholder="مكان الإقامة (المدينة)">
+            <input type="text" id="major" class="real-input" placeholder="التخصص / سنة التخرج المتوقعة">
+            <div style="display:flex; gap:10px;">
+              <button type="button" class="btn btn-outline" onclick="goToStep(2)">السابق</button>
+              <button type="button" class="btn btn-primary" onclick="goToStep(4)">التالي: مراجعة وإرسال</button>
+            </div>
+          </div>
+
+          <!-- الخطوة 4 -->
+          <div class="step-panel" data-panel="4">
+            <h4>مراجعة سريعة قبل الإرسال</h4>
+            <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">تأكد أن كل البيانات صحيحة، ثم اضغط الزر أدناه لحفظ تسجيلك في المنصة.</p>
+            <div style="display:flex; gap:10px;">
+              <button type="button" class="btn btn-outline" onclick="goToStep(3)">السابق</button>
+              <button type="submit" id="submitBtn" class="btn btn-primary" style="flex:1;">إرسال طلب التسجيل</button>
+            </div>
           </div>
         </div>
-        <div class="step-panel" data-panel="2">
-          <h4>البيانات الأساسية</h4>
-          <div class="fake-field">الاسم الكامل *</div>
-          <div class="fake-field">البريد الإلكتروني الرسمي</div>
-          <div class="fake-field">رقم الهاتف (مثال: 0791234567)</div>
-        </div>
-        <div class="step-panel" data-panel="3">
-          <h4>تفاصيل إضافية</h4>
-          <div class="fake-field">مكان الإقامة (المدينة)</div>
-          <div class="fake-field">التخصص / سنة التخرج المتوقعة</div>
-        </div>
-        <div class="step-panel" data-panel="4">
-          <h4>مراجعة سريعة قبل الإرسال</h4>
-          <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">تأكد أن كل البيانات صحيحة، ثم اضغط الزر أدناه لإرسال رمز التفعيل إلى بريدك الإلكتروني.</p>
-          <button class="btn btn-primary" style="width:100%;">إرسال رمز التفعيل</button>
-        </div>
-      </div>
+      </form>
+
+      <div id="formStatus" class="form-status"></div>
     </div>
   </div>
 </section>
@@ -456,32 +462,93 @@
 </footer>
 
 <script>
-  // sticky header shadow/background on scroll
+  // ---------------- 1. إعدادات وقواعد اتصالات Supabase ----------------
+  const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nZXN2ZGJzZ3B0ZmlmbGxkdXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2MTgzMjh9.p615kM4OatK_K6Y_J6I15o_2k1E8f_fK4g5k33_k'; // مفتاح الوصول الخاص بالمنصة
+  
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ---------------- 2. التنقل بين خطوات التسجيل ----------------
+  function goToStep(stepNum) {
+    const steps = document.querySelectorAll('.step');
+    const panels = document.querySelectorAll('.step-panel');
+    
+    steps.forEach(b => b.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+
+    document.querySelector(`.step[data-step="${stepNum}"]`).classList.add('active');
+    document.querySelector(`.step-panel[data-panel="${stepNum}"]`).classList.add('active');
+  }
+
+  document.querySelectorAll('.step').forEach(btn => {
+    btn.addEventListener('click', () => {
+      goToStep(btn.dataset.step);
+    });
+  });
+
+  // اختيار نوع الحساب
+  document.querySelectorAll('.type-choice .opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.type-choice .opt').forEach(o => o.classList.remove('picked'));
+      opt.classList.add('picked');
+      document.getElementById('account_type').value = opt.dataset.type;
+    });
+  });
+
+  // ---------------- 3. دالة إرسال البيانات إلى Supabase ----------------
+  const registrationForm = document.getElementById('registrationForm');
+  const formStatus = document.getElementById('formStatus');
+  const submitBtn = document.getElementById('submitBtn');
+
+  registrationForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'جاري الإرسال...';
+    formStatus.className = 'form-status';
+    formStatus.style.display = 'none';
+
+    // جمع البيانات من النموذج
+    const formData = {
+      account_type: document.getElementById('account_type').value,
+      full_name: document.getElementById('full_name').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      city: document.getElementById('city').value,
+      major: document.getElementById('major').value
+    };
+
+    try {
+      // إرسال البيانات لجدول 'registrations' في Supabase
+      const { data, error } = await supabaseClient
+        .from('registrations')
+        .insert([formData]);
+
+      if (error) throw error;
+
+      // إظهار رسالة النجاح
+      formStatus.innerText = 'تم إرسال طلبك بنجاح! وسيتواصل معك فريقنا قريباً.';
+      formStatus.classList.add('success');
+      registrationForm.reset();
+      goToStep(1);
+
+    } catch (err) {
+      console.error('Supabase Error:', err);
+      formStatus.innerText = 'حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى أو التأكد من إدخال البيانات.';
+      formStatus.classList.add('error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'إرسال طلب التسجيل';
+    }
+  });
+
+  // Sticky header
   const header = document.getElementById('siteHeader');
   window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 8);
   });
-
-  // registration stepper interactivity
-  const steps = document.querySelectorAll('.step');
-  const panels = document.querySelectorAll('.step-panel');
-  steps.forEach(btn => {
-    btn.addEventListener('click', () => {
-      steps.forEach(b => b.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelector('.step-panel[data-panel="' + btn.dataset.step + '"]').classList.add('active');
-    });
-  });
-
-  // account type picker (visual only)
-  document.querySelectorAll('.type-choice .opt').forEach(opt => {
-    opt.addEventListener('click', () => {
-      opt.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('picked'));
-      opt.classList.add('picked');
-    });
-  });
 </script>
 
 </body>
-</html>                    
+</html>
+      
