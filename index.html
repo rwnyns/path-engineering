@@ -41,7 +41,7 @@
   :focus-visible{ outline:3px solid var(--gold); outline-offset:3px; border-radius:6px; }
   .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; }
 
-  /* ---------------- NAV ---------------- */
+  /* NAV */
   header{
     position:sticky; top:0; z-index:100;
     background:rgba(247,250,249,0.95);
@@ -50,7 +50,7 @@
     transition:border-color .25s ease, background .25s ease;
   }
   header.scrolled{ border-color:var(--line); background:rgba(247,250,249,0.98); }
-  nav{ display:flex; align-items:center; justify-style:space-between; justify-content:space-between; padding:16px 0; }
+  nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
   .brand{ display:flex; align-items:center; gap:10px; }
   .brand svg{ flex:none; }
   .brand-text{ font-family:'Cairo',sans-serif; font-weight:800; font-size:19px; color:var(--primary); }
@@ -74,7 +74,7 @@
   .btn-outline:hover{ background:var(--primary); color:var(--white); }
   .nav-cta{ display:flex; align-items:center; gap:16px; }
 
-  /* ---------------- HERO ---------------- */
+  /* HERO */
   .hero{ padding:60px 0 40px; }
   .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; }
   .hero h1{ font-size:44px; line-height:1.28; font-weight:800; color:var(--primary); margin-bottom:20px; }
@@ -92,13 +92,13 @@
   .path-node .label{ font-weight:700; font-size:15px; color:var(--ink); }
   .path-node .sub{ font-size:12.5px; color:var(--muted); margin-top:2px; }
 
-  /* ---------------- SECTION HEADS ---------------- */
+  /* SECTIONS */
   .section{ padding:64px 0; }
   .section-head{ max-width:640px; margin-bottom:40px; }
   .section-head h2{ font-size:32px; color:var(--primary); font-weight:800; margin-bottom:12px; }
   .section-head p{ color:var(--muted); font-size:16px; }
 
-  /* ---------------- SERVICES ---------------- */
+  /* SERVICES */
   .service-row{
     display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:32px;
     padding:32px 0; border-top:1px solid var(--line);
@@ -121,7 +121,7 @@
   }
   .service-link{ display:flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--primary); }
 
-  /* ---------------- WHY-US GRID ---------------- */
+  /* WHY-US */
   .why-section{ background:var(--white); }
   .why-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:28px; }
   .why-card{
@@ -138,7 +138,7 @@
   .why-card h3{ font-family:'Tajawal',sans-serif; font-weight:700; font-size:16.5px; color:var(--ink); margin-bottom:10px; line-height:1.5; }
   .why-card p{ font-size:13.8px; color:var(--muted); }
 
-  /* ---------------- REGISTRATION STEPPER & INPUTS ---------------- */
+  /* REGISTRATION STEPPER & INPUTS */
   .register-panel{
     background:var(--white); border:1px solid var(--line); border-radius:var(--radius-lg);
     padding:36px; box-shadow:0 30px 60px -40px rgba(18,59,50,.25);
@@ -183,7 +183,7 @@
   .form-status.success{ background:#E6F4EA; color:#137333; display:block; }
   .form-status.error{ background:#FCE8E6; color:#C5221F; display:block; }
 
-  /* ---------------- FOOTER ---------------- */
+  /* FOOTER */
   footer{ background:var(--primary-2); color:var(--white); padding:56px 0 28px; }
   .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; margin-bottom:36px; }
   footer h5{ color:var(--gold); font-size:14.5px; font-weight:700; margin-bottom:16px; }
@@ -363,7 +363,7 @@
   </div>
 </section>
 
-<!-- ---------------- REGISTRATION FORM ---------------- -->
+<!-- REGISTRATION FORM -->
 <section class="section" id="register">
   <div class="wrap">
     <div class="section-head">
@@ -405,11 +405,12 @@
             </div>
           </div>
 
-          <!-- الخطوة 3 -->
+          <!-- الخطوة 3 (تم الفصل هنا) -->
           <div class="step-panel" data-panel="3">
             <h4>تفاصيل إضافية</h4>
             <input type="text" id="city" class="real-input" placeholder="مكان الإقامة (المدينة)">
-            <input type="text" id="major" class="real-input" placeholder="التخصص / سنة التخرج المتوقعة">
+            <input type="text" id="major" class="real-input" placeholder="التخصص الأكاديمي">
+            <input type="text" id="graduation_year" class="real-input" placeholder="سنة التخرج المتوقعة (مثال: 2026)">
             <div style="display:flex; gap:10px;">
               <button type="button" class="btn btn-outline" onclick="goToStep(2)">السابق</button>
               <button type="button" class="btn btn-primary" onclick="goToStep(4)">التالي: مراجعة وإرسال</button>
@@ -419,10 +420,10 @@
           <!-- الخطوة 4 -->
           <div class="step-panel" data-panel="4">
             <h4>مراجعة سريعة قبل الإرسال</h4>
-            <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">تأكد أن كل البيانات صحيحة، ثم اضغط الزر أدناه لحفظ تسجيلك في المنصة.</p>
+            <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">تأكد أن كل البيانات صحيحة، ثم اضغط الزر أدناه لحفظ تسجيلك وتفعيل الطلب.</p>
             <div style="display:flex; gap:10px;">
               <button type="button" class="btn btn-outline" onclick="goToStep(3)">السابق</button>
-              <button type="submit" id="submitBtn" class="btn btn-primary" style="flex:1;">إرسال طلب التسجيل</button>
+              <button type="submit" id="submitBtn" class="btn btn-primary" style="flex:1;">إرسال طلب التسجيل وتفعيل الحساب</button>
             </div>
           </div>
         </div>
@@ -461,13 +462,13 @@
 </footer>
 
 <script>
-  // 1. إعدادات اتصالات Supabase
+  // 1. اتصالات Supabase
   const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nZXN2ZGJzZ3B0ZmlmbGxkdXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2MTgzMjh9.p615kM4OatK_K6Y_J6I15o_2k1E8f_fK4g5k33_k'; 
   
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // 2. التنقل بين خطوات التسجيل مع الفحص التلقائي للبيانات
+  // 2. التنقل بين الخطوات
   function goToStep(stepNum) {
     if (stepNum > 2) {
       const fullName = document.getElementById('full_name').value.trim();
@@ -475,7 +476,7 @@
       const phone = document.getElementById('phone').value.trim();
 
       if (!fullName || !email || !phone) {
-        alert('يرجى إكمال البيانات الأساسية أولاً (الاسم الكامل، البريد الإلكتروني، ورقم الهاتف) في الخطوة 2.');
+        alert('يرجى تعبئة الحقول الأساسية (الاسم، البريد الإلكتروني، والهاتف) في الخطوة 2 أولاً.');
         goToStep(2);
         return;
       }
@@ -497,7 +498,6 @@
     });
   });
 
-  // اختيار نوع الحساب
   document.querySelectorAll('.type-choice .opt').forEach(opt => {
     opt.addEventListener('click', () => {
       document.querySelectorAll('.type-choice .opt').forEach(o => o.classList.remove('picked'));
@@ -506,7 +506,7 @@
     });
   });
 
-  // 3. دالة إرسال البيانات إلى Supabase
+  // 3. دالة الحفظ والإرسال المحدثة
   const registrationForm = document.getElementById('registrationForm');
   const formStatus = document.getElementById('formStatus');
   const submitBtn = document.getElementById('submitBtn');
@@ -525,18 +525,22 @@
     }
 
     submitBtn.disabled = true;
-    submitBtn.innerText = 'جاري الإرسال...';
+    submitBtn.innerText = 'جاري تسجيل الحساب وإرسال البيانات...';
     formStatus.className = 'form-status';
     formStatus.style.display = 'none';
 
-    // جمع البيانات من النموذج
+    // ندمج التخصص وسنة التخرج لإرسالهما لعمود major المسجل في قاعدة البيانات دون مشاكل
+    const majorText = document.getElementById('major').value.trim();
+    const gradYearText = document.getElementById('graduation_year').value.trim();
+    const combinedMajor = gradYearText ? `${majorText} (تخرج: ${gradYearText})` : majorText;
+
     const formData = {
       account_type: document.getElementById('account_type').value,
       full_name: fullName,
       email: email,
       phone: phone,
       city: document.getElementById('city').value.trim(),
-      major: document.getElementById('major').value.trim()
+      major: combinedMajor
     };
 
     try {
@@ -544,24 +548,27 @@
         .from('registrations')
         .insert([formData]);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
-      formStatus.innerText = 'تم إرسال طلبك بنجاح! وسيتواصل معك فريقنا قريباً.';
+      formStatus.innerText = '✓ تم تسجيل الحساب وإرسال طلبك بنجاح! تم حفظ البيانات في قاعدة البيانات.';
       formStatus.classList.add('success');
       registrationForm.reset();
-      goToStep(1);
+      
+      // التمرير التلقائي لمشاهدة رسالة النجاح بوضوح
+      formStatus.scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
       console.error('Supabase Error:', err);
-      formStatus.innerText = 'حدث خطأ أثناء الإرسال. يرجى التأكد من البيانات أو إعادة المحاولة.';
+      formStatus.innerText = 'تنبيه: تعذر إتمام الإرسال. تأكدي من تفعيل مشروع Supabase وإلغاء إيقافه المؤقت (Unpause)، ومنح صلاحية الإضافة للجدول RLS.';
       formStatus.classList.add('error');
     } finally {
       submitBtn.disabled = false;
-      submitBtn.innerText = 'إرسال طلب التسجيل';
+      submitBtn.innerText = 'إرسال طلب التسجيل وتفعيل الحساب';
     }
   });
 
-  // Sticky header
   const header = document.getElementById('siteHeader');
   window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 8);
@@ -570,5 +577,4 @@
 
 </body>
 </html>
-    
-              
+                  
