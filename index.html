@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
-<!-- 1. استدعاء مكتبة Supabase -->
+<!-- مكتبة Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -34,7 +34,7 @@
     color:var(--ink);
     line-height:1.7;
   }
-  h1,h2,h3{ font-family:'Cairo', sans-serif; margin:0; }
+  h1,h2,h3,h4{ font-family:'Cairo', sans-serif; margin:0; }
   p{margin:0;}
   a{ text-decoration:none; color:inherit; }
   img,svg{display:block;}
@@ -43,14 +43,14 @@
 
   /* ---------------- NAV ---------------- */
   header{
-    position:sticky; top:0; z-index:50;
-    background:rgba(247,250,249,0.88);
+    position:sticky; top:0; z-index:100;
+    background:rgba(247,250,249,0.95);
     backdrop-filter:blur(10px);
     border-bottom:1px solid transparent;
     transition:border-color .25s ease, background .25s ease;
   }
   header.scrolled{ border-color:var(--line); background:rgba(247,250,249,0.98); }
-  nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
+  nav{ display:flex; align-items:center; justify-style:space-between; justify-content:space-between; padding:16px 0; }
   .brand{ display:flex; align-items:center; gap:10px; }
   .brand svg{ flex:none; }
   .brand-text{ font-family:'Cairo',sans-serif; font-weight:800; font-size:19px; color:var(--primary); }
@@ -75,13 +75,12 @@
   .nav-cta{ display:flex; align-items:center; gap:16px; }
 
   /* ---------------- HERO ---------------- */
-  .hero{ padding:76px 0 60px; }
+  .hero{ padding:60px 0 40px; }
   .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; }
   .hero h1{ font-size:44px; line-height:1.28; font-weight:800; color:var(--primary); margin-bottom:20px; }
   .hero p.lede{ font-size:17px; color:var(--muted); max-width:46ch; margin-bottom:32px; }
   .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
 
-  /* path visual */
   .path-visual{ position:relative; }
   .path-node{ display:flex; align-items:center; gap:14px; }
   .path-node .dot{
@@ -94,23 +93,22 @@
   .path-node .sub{ font-size:12.5px; color:var(--muted); margin-top:2px; }
 
   /* ---------------- SECTION HEADS ---------------- */
-  .section{ padding:88px 0; }
-  .section-head{ max-width:640px; margin-bottom:52px; }
+  .section{ padding:64px 0; }
+  .section-head{ max-width:640px; margin-bottom:40px; }
   .section-head h2{ font-size:32px; color:var(--primary); font-weight:800; margin-bottom:12px; }
   .section-head p{ color:var(--muted); font-size:16px; }
 
   /* ---------------- SERVICES ---------------- */
   .service-row{
     display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:32px;
-    padding:36px 0; border-top:1px solid var(--line);
+    padding:32px 0; border-top:1px solid var(--line);
     transition:background .2s ease;
   }
   .service-row:last-child{ border-bottom:1px solid var(--line); }
-  .service-row:hover{ background:rgba(47,143,114,0.05); }
+  .service-row:hover{ background:rgba(47,143,114,0.03); }
   .service-icon{
     width:64px; height:64px; border-radius:18px; flex:none;
-    display:flex; align-items:center; justify-content:center;
-    color:var(--white);
+    display:flex; align-items:center; justify-content:center; color:var(--white);
   }
   .service-row:nth-child(odd) .service-icon{ background:var(--primary); }
   .service-row:nth-child(even) .service-icon{ background:var(--mint); }
@@ -121,9 +119,7 @@
     font-size:12.5px; font-weight:700; padding:6px 14px; border-radius:20px;
     background:var(--gold); color:var(--primary-2); white-space:nowrap;
   }
-  .service-link{
-    display:flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--primary);
-  }
+  .service-link{ display:flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--primary); }
 
   /* ---------------- WHY-US GRID ---------------- */
   .why-section{ background:var(--white); }
@@ -145,52 +141,51 @@
   /* ---------------- REGISTRATION STEPPER & INPUTS ---------------- */
   .register-panel{
     background:var(--white); border:1px solid var(--line); border-radius:var(--radius-lg);
-    padding:44px; box-shadow:0 30px 60px -40px rgba(18,59,50,.35);
+    padding:36px; box-shadow:0 30px 60px -40px rgba(18,59,50,.25);
+    position:relative; z-index:10;
   }
-  .stepper{ display:flex; justify-content:space-between; position:relative; margin-bottom:40px; }
+  .stepper{ display:flex; justify-content:space-between; position:relative; margin-bottom:36px; }
   .stepper::before{
-    content:""; position:absolute; top:19px; right:24px; left:24px; height:2px; background:var(--line); z-index:0;
+    content:""; position:absolute; top:19px; right:20px; left:20px; height:2px; background:var(--line); z-index:0;
   }
-  .step{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:10px; cursor:pointer; background:none; border:none; font-family:inherit; }
+  .step{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; background:none; border:none; font-family:inherit; }
   .step .num{
     width:40px; height:40px; border-radius:50%; background:var(--white); border:2px solid var(--line);
     display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--muted);
     transition:all .2s ease;
   }
-  .step span.t{ font-size:12.5px; color:var(--muted); font-weight:700; max-width:100px; text-align:center; }
+  .step span.t{ font-size:12.5px; color:var(--muted); font-weight:700; text-align:center; }
   .step.active .num{ background:var(--primary); border-color:var(--primary); color:var(--white); }
   .step.active span.t{ color:var(--primary); }
-  .step-panels{ min-height:150px; }
+
   .step-panel{ display:none; }
   .step-panel.active{ display:block; }
-  .step-panel h4{ font-family:'Cairo',sans-serif; font-size:19px; color:var(--primary); margin-bottom:14px; }
+  .step-panel h4{ font-size:19px; color:var(--primary); margin-bottom:16px; }
 
-  /* حقول الإدخال الحقيقية (Real Form Inputs) */
   .real-input{
     width:100%;
     height:48px; border:1.5px solid var(--line); border-radius:10px; background:var(--bg);
-    padding:0 16px; color:var(--ink); font-family:'Tajawal', sans-serif; font-size:14px; margin-bottom:14px;
+    padding:0 16px; color:var(--ink); font-family:'Tajawal', sans-serif; font-size:14px; margin-bottom:16px;
     transition:border-color .2s ease, background .2s ease;
   }
   .real-input:focus{ outline:none; border-color:var(--mint); background:var(--white); }
 
-  .type-choice{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .type-choice{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
   .type-choice .opt{
-    border:1.5px solid var(--line); border-radius:12px; padding:16px 10px; text-align:center; font-size:13.5px; font-weight:700; color:var(--ink);
+    border:1.5px solid var(--line); border-radius:12px; padding:16px 10px; text-align:center; font-size:14px; font-weight:700; color:var(--ink);
     transition:all .15s ease; cursor:pointer;
   }
   .type-choice .opt.picked{ border-color:var(--mint); background:rgba(47,143,114,.08); color:var(--primary); }
 
-  /* رسائل الحالة (النجاح والخطأ) */
   .form-status{
-    margin-top:16px; padding:12px; border-radius:10px; font-size:14px; font-weight:700; text-align:center; display:none;
+    margin-top:20px; padding:14px; border-radius:10px; font-size:14px; font-weight:700; text-align:center; display:none;
   }
   .form-status.success{ background:#E6F4EA; color:#137333; display:block; }
   .form-status.error{ background:#FCE8E6; color:#C5221F; display:block; }
 
   /* ---------------- FOOTER ---------------- */
-  footer{ background:var(--primary-2); color:var(--white); padding:64px 0 28px; }
-  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; margin-bottom:40px; }
+  footer{ background:var(--primary-2); color:var(--white); padding:56px 0 28px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; margin-bottom:36px; }
   footer h5{ color:var(--gold); font-size:14.5px; font-weight:700; margin-bottom:16px; }
   footer .brand-text{ color:var(--white); }
   footer .brand-text span{ color:var(--gold); }
@@ -202,15 +197,19 @@
 
   /* RESPONSIVE */
   @media (max-width:880px){
+    .wrap{ padding:0 18px; }
     .nav-links{ display:none; }
-    .hero-grid{ grid-template-columns:1fr; }
-    .hero h1{ font-size:32px; }
+    .btn-primary{ padding:10px 18px; font-size:14px; }
+    .hero{ padding:36px 0; }
+    .hero-grid{ grid-template-columns:1fr; gap:36px; }
+    .hero h1{ font-size:30px; }
     .why-grid{ grid-template-columns:1fr; }
     .footer-grid{ grid-template-columns:1fr; }
     .service-row{ grid-template-columns:auto 1fr; }
-    .service-meta{ grid-column:1/-1; flex-direction:row; justify-content:space-between; margin-top:14px; }
+    .service-meta{ grid-column:1/-1; flex-direction:row; justify-content:space-between; margin-top:10px; }
     .type-choice{ grid-template-columns:1fr; }
     .stepper span.t{ display:none; }
+    .register-panel{ padding:22px 18px; }
   }
 </style>
 </head>
@@ -240,7 +239,7 @@
 
 <section class="hero" id="hero">
   <div class="wrap hero-grid">
-    <div class="reveal">
+    <div>
       <h1>من التدريب الجامعي<br>إلى الوظيفة الحقيقية</h1>
       <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي بمنظومة واحدة.</p>
       <div class="hero-actions">
@@ -249,7 +248,7 @@
       </div>
     </div>
 
-    <div class="path-visual reveal" style="display:flex; flex-direction:column; gap:26px;">
+    <div class="path-visual" style="display:flex; flex-direction:column; gap:20px;">
       <div class="path-node done">
         <div class="dot">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3L2 8l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5" stroke="currentColor" stroke-width="1.8"/></svg>
@@ -280,7 +279,7 @@
 
 <section class="section why-section">
   <div class="wrap">
-    <div class="section-head" style="max-width:680px;">
+    <div class="section-head">
       <h2>ليش الطلاب والشركات بيختاروا Path Engineering</h2>
       <p>مش مجرد منصة تسجيل — منظومة متكاملة ترافقك من أول يوم تدريب لحد ما توقّع عقد التوظيف.</p>
     </div>
@@ -380,7 +379,7 @@
         <button type="button" class="step" data-step="4"><span class="num">٤</span><span class="t">تأكيد وإرسال</span></button>
       </div>
 
-      <form id="registrationForm">
+      <form id="registrationForm" novalidate>
         <div class="step-panels">
           <!-- الخطوة 1 -->
           <div class="step-panel active" data-panel="1">
@@ -391,7 +390,7 @@
               <div class="opt" data-type="مرشد / مهندس">مرشد / مهندس</div>
             </div>
             <input type="hidden" id="account_type" value="طالب">
-            <button type="button" class="btn btn-primary" style="margin-top:20px;" onclick="goToStep(2)">التالي: البيانات الأساسية</button>
+            <button type="button" class="btn btn-primary" onclick="goToStep(2)">التالي: البيانات الأساسية</button>
           </div>
 
           <!-- الخطوة 2 -->
@@ -462,14 +461,26 @@
 </footer>
 
 <script>
-  // ---------------- 1. إعدادات وقواعد اتصالات Supabase ----------------
+  // 1. إعدادات اتصالات Supabase
   const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nZXN2ZGJzZ3B0ZmlmbGxkdXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2MTgzMjh9.p615kM4OatK_K6Y_J6I15o_2k1E8f_fK4g5k33_k'; // مفتاح الوصول الخاص بالمنصة
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nZXN2ZGJzZ3B0ZmlmbGxkdXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2MTgzMjh9.p615kM4OatK_K6Y_J6I15o_2k1E8f_fK4g5k33_k'; 
   
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ---------------- 2. التنقل بين خطوات التسجيل ----------------
+  // 2. التنقل بين خطوات التسجيل مع الفحص التلقائي للبيانات
   function goToStep(stepNum) {
+    if (stepNum > 2) {
+      const fullName = document.getElementById('full_name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      if (!fullName || !email || !phone) {
+        alert('يرجى إكمال البيانات الأساسية أولاً (الاسم الكامل، البريد الإلكتروني، ورقم الهاتف) في الخطوة 2.');
+        goToStep(2);
+        return;
+      }
+    }
+
     const steps = document.querySelectorAll('.step');
     const panels = document.querySelectorAll('.step-panel');
     
@@ -482,7 +493,7 @@
 
   document.querySelectorAll('.step').forEach(btn => {
     btn.addEventListener('click', () => {
-      goToStep(btn.dataset.step);
+      goToStep(parseInt(btn.dataset.step));
     });
   });
 
@@ -495,13 +506,23 @@
     });
   });
 
-  // ---------------- 3. دالة إرسال البيانات إلى Supabase ----------------
+  // 3. دالة إرسال البيانات إلى Supabase
   const registrationForm = document.getElementById('registrationForm');
   const formStatus = document.getElementById('formStatus');
   const submitBtn = document.getElementById('submitBtn');
 
   registrationForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    const fullName = document.getElementById('full_name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+
+    if (!fullName || !email || !phone) {
+      alert('يرجى تعبئة جميع الحقول المطلوبة قبل الإرسال.');
+      goToStep(2);
+      return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.innerText = 'جاري الإرسال...';
@@ -511,22 +532,20 @@
     // جمع البيانات من النموذج
     const formData = {
       account_type: document.getElementById('account_type').value,
-      full_name: document.getElementById('full_name').value,
-      email: document.getElementById('email').value,
-      phone: document.getElementById('phone').value,
-      city: document.getElementById('city').value,
-      major: document.getElementById('major').value
+      full_name: fullName,
+      email: email,
+      phone: phone,
+      city: document.getElementById('city').value.trim(),
+      major: document.getElementById('major').value.trim()
     };
 
     try {
-      // إرسال البيانات لجدول 'registrations' في Supabase
       const { data, error } = await supabaseClient
         .from('registrations')
         .insert([formData]);
 
       if (error) throw error;
 
-      // إظهار رسالة النجاح
       formStatus.innerText = 'تم إرسال طلبك بنجاح! وسيتواصل معك فريقنا قريباً.';
       formStatus.classList.add('success');
       registrationForm.reset();
@@ -534,7 +553,7 @@
 
     } catch (err) {
       console.error('Supabase Error:', err);
-      formStatus.innerText = 'حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى أو التأكد من إدخال البيانات.';
+      formStatus.innerText = 'حدث خطأ أثناء الإرسال. يرجى التأكد من البيانات أو إعادة المحاولة.';
       formStatus.classList.add('error');
     } finally {
       submitBtn.disabled = false;
@@ -551,4 +570,5 @@
 
 </body>
 </html>
-      
+    
+              
