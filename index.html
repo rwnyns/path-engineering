@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Path Engineering — المنصة التفاعلية</title>
+<title>Path Engineering — الشكل الجديد</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-<!-- Supabase JS Client -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
   :root{
     --primary:#123B32;
@@ -36,264 +33,278 @@
   h1,h2,h3{ font-family:'Cairo', sans-serif; margin:0; }
   p{margin:0;}
   a{ text-decoration:none; color:inherit; }
+  img,svg{display:block;}
+  :focus-visible{ outline:3px solid var(--gold); outline-offset:3px; border-radius:6px; }
   .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; }
 
-  /* NAV */
+  /* ---------------- NAV ---------------- */
   header{
     position:sticky; top:0; z-index:50;
-    background:rgba(247,250,249,0.95);
+    background:rgba(247,250,249,0.88);
     backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);
+    border-bottom:1px solid transparent;
+    transition:border-color .25s ease, background .25s ease;
   }
+  header.scrolled{ border-color:var(--line); background:rgba(247,250,249,0.98); }
   nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
   .brand{ display:flex; align-items:center; gap:10px; }
+  .brand svg{ flex:none; }
   .brand-text{ font-family:'Cairo',sans-serif; font-weight:800; font-size:19px; color:var(--primary); }
   .brand-text span{ color:var(--mint); }
   .nav-links{ display:flex; gap:34px; list-style:none; margin:0; padding:0; }
-  .nav-links a{ font-size:15px; font-weight:500; color:var(--ink); }
-  
+  .nav-links a{ font-size:15px; font-weight:500; color:var(--ink); position:relative; padding:6px 2px; }
+  .nav-links a::after{
+    content:""; position:absolute; right:0; left:0; bottom:-2px; height:2px;
+    background:var(--mint); transform:scaleX(0); transform-origin:left; transition:transform .2s ease;
+  }
+  .nav-links a:hover::after{ transform:scaleX(1); }
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
     font-family:'Tajawal',sans-serif; font-weight:700; font-size:15px;
     padding:12px 26px; border-radius:12px; cursor:pointer; border:none;
-    transition:transform .18s ease, background .18s ease;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
   }
-  .btn-primary{ background:var(--mint); color:var(--white); }
-  .btn-primary:hover{ transform:translateY(-2px); background:#25755d; }
+  .btn-primary{ background:var(--mint); color:var(--white); box-shadow:0 10px 22px -10px rgba(47,143,114,.55); }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 26px -10px rgba(47,143,114,.6); }
+  .btn-outline{ background:transparent; color:var(--primary); border:1.5px solid var(--primary); }
+  .btn-outline:hover{ background:var(--primary); color:var(--white); }
+  .btn-ghost-light{ background:transparent; color:var(--white); border:1.5px solid rgba(255,255,255,.5); }
+  .btn-ghost-light:hover{ background:rgba(255,255,255,.12); border-color:var(--white); }
+  .nav-cta{ display:flex; align-items:center; gap:16px; }
+  .burger{ display:none; }
 
-  /* HERO */
-  .hero{ padding:60px 0 40px; }
-  .hero h1{ font-size:40px; line-height:1.28; color:var(--primary); margin-bottom:16px; }
-  .hero p.lede{ font-size:16px; color:var(--muted); margin-bottom:24px; }
+  /* ---------------- HERO ---------------- */
+  .hero{ padding:76px 0 60px; }
+  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; }
+  .eyebrow-free{ font-size:14px; color:var(--mint); font-weight:700; margin-bottom:14px; }
+  .hero h1{ font-size:44px; line-height:1.28; font-weight:800; color:var(--primary); margin-bottom:20px; }
+  .hero p.lede{ font-size:17px; color:var(--muted); max-width:46ch; margin-bottom:32px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
 
-  /* REGISTRATION PANEL */
+  /* path visual */
+  .path-visual{ position:relative; }
+  .path-visual svg{ width:100%; height:auto; }
+  .path-node{ display:flex; align-items:center; gap:14px; }
+  .path-node .dot{
+    width:46px; height:46px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--white); border:2px solid var(--mint); color:var(--primary);
+  }
+  .path-node.done .dot{ background:var(--primary); border-color:var(--primary); color:var(--white); }
+  .path-node .label{ font-weight:700; font-size:15px; color:var(--ink); }
+  .path-node .sub{ font-size:12.5px; color:var(--muted); margin-top:2px; }
+
+  /* ---------------- SECTION HEADS ---------------- */
+  .section{ padding:88px 0; }
+  .section-head{ max-width:640px; margin-bottom:52px; }
+  .section-head h2{ font-size:32px; color:var(--primary); font-weight:800; margin-bottom:12px; }
+  .section-head p{ color:var(--muted); font-size:16px; }
+
+  /* ---------------- SERVICES (row list, not identical cards) ---------------- */
+  .service-row{
+    display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:32px;
+    padding:36px 0; border-top:1px solid var(--line);
+    transition:background .2s ease;
+  }
+  .service-row:last-child{ border-bottom:1px solid var(--line); }
+  .service-row:hover{ background:rgba(47,143,114,0.05); }
+  .service-icon{
+    width:64px; height:64px; border-radius:18px; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--white);
+  }
+  .service-row:nth-child(odd) .service-icon{ background:var(--primary); }
+  .service-row:nth-child(even) .service-icon{ background:var(--mint); }
+  .service-body h3{ font-size:19px; color:var(--ink); margin-bottom:8px; }
+  .service-body p{ color:var(--muted); font-size:14.5px; max-width:56ch; }
+  .service-meta{ display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
+  .badge{
+    font-size:12.5px; font-weight:700; padding:6px 14px; border-radius:20px;
+    background:var(--gold); color:var(--primary-2); white-space:nowrap;
+  }
+  .service-link{
+    display:flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--primary);
+  }
+  .service-link svg{ transition:transform .18s ease; }
+  .service-row:hover .service-link svg{ transform:translateX(-4px); }
+
+  /* ---------------- WHY-US GRID ---------------- */
+  .why-section{ background:var(--white); }
+  .why-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:28px; }
+  .why-card{
+    padding:30px 26px; border-radius:var(--radius-md); background:var(--bg);
+    border:1px solid var(--line); transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .why-card:hover{ transform:translateY(-4px); box-shadow:0 20px 40px -28px rgba(18,59,50,.35); }
+  .why-icon{
+    width:52px; height:52px; border-radius:14px; background:var(--primary);
+    display:flex; align-items:center; justify-content:center; margin-bottom:18px;
+  }
+  .why-card:nth-child(3n+2) .why-icon{ background:var(--mint); }
+  .why-card:nth-child(3n) .why-icon{ background:var(--gold); }
+  .why-card h3{ font-family:'Tajawal',sans-serif; font-weight:700; font-size:16.5px; color:var(--ink); margin-bottom:10px; line-height:1.5; }
+  .why-card p{ font-size:13.8px; color:var(--muted); }
+
+  /* ---------------- REGISTRATION STEPPER ---------------- */
   .register-panel{
     background:var(--white); border:1px solid var(--line); border-radius:var(--radius-lg);
-    padding:36px; box-shadow:0 20px 40px -30px rgba(18,59,50,.2);
+    padding:44px; box-shadow:0 30px 60px -40px rgba(18,59,50,.35);
   }
-  
-  .type-choice{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:24px; }
+  .stepper{ display:flex; justify-content:space-between; position:relative; margin-bottom:40px; }
+  .stepper::before{
+    content:""; position:absolute; top:19px; right:24px; left:24px; height:2px; background:var(--line); z-index:0;
+  }
+  .step{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:10px; cursor:pointer; background:none; border:none; font-family:inherit; }
+  .step .num{
+    width:40px; height:40px; border-radius:50%; background:var(--white); border:2px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--muted);
+    transition:all .2s ease;
+  }
+  .step span.t{ font-size:12.5px; color:var(--muted); font-weight:700; max-width:100px; text-align:center; }
+  .step.active .num{ background:var(--primary); border-color:var(--primary); color:var(--white); }
+  .step.active span.t{ color:var(--primary); }
+  .step-panels{ min-height:150px; }
+  .step-panel{ display:none; }
+  .step-panel.active{ display:block; }
+  .step-panel h4{ font-family:'Cairo',sans-serif; font-size:19px; color:var(--primary); margin-bottom:14px; }
+  .fake-field{
+    height:48px; border:1.5px solid var(--line); border-radius:10px; background:var(--bg);
+    display:flex; align-items:center; padding:0 16px; color:var(--muted); font-size:13.5px; margin-bottom:14px;
+  }
+  .type-choice{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
   .type-choice .opt{
-    border:1.5px solid var(--line); border-radius:12px; padding:14px 10px; text-align:center; font-size:14px; font-weight:700; color:var(--ink);
-    cursor:pointer; transition:all .15s ease;
+    border:1.5px solid var(--line); border-radius:12px; padding:16px 10px; text-align:center; font-size:13.5px; font-weight:700; color:var(--ink);
+    transition:all .15s ease; cursor:pointer;
   }
   .type-choice .opt.picked{ border-color:var(--mint); background:rgba(47,143,114,.08); color:var(--primary); }
 
-  /* FORM INPUTS */
-  .form-group{ margin-bottom:16px; }
-  .form-group label{ display:block; font-size:14px; font-weight:700; color:var(--primary); margin-bottom:6px; }
-  .form-control{
-    width:100%; height:46px; border:1.5px solid var(--line); border-radius:10px; background:var(--bg);
-    padding:0 16px; color:var(--ink); font-family:inherit; font-size:14px; outline:none;
-  }
-  .form-control:focus{ border-color:var(--mint); background:var(--white); }
-  textarea.form-control{ height:auto; padding:12px 16px; }
+  /* ---------------- FOOTER ---------------- */
+  footer{ background:var(--primary-2); color:var(--white); padding:64px 0 28px; }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; margin-bottom:40px; }
+  footer h5{ color:var(--gold); font-size:14.5px; font-weight:700; margin-bottom:16px; }
+  footer .brand-text{ color:var(--white); }
+  footer .brand-text span{ color:var(--gold); }
+  footer p.lede{ color:#BFD3CC; font-size:14px; margin-top:14px; max-width:38ch; }
+  footer ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px; }
+  footer a{ color:#D8E6E1; font-size:14px; }
+  footer a:hover{ color:var(--gold); }
+  .footer-bottom{ border-top:1px solid rgba(255,255,255,.12); padding-top:22px; text-align:center; font-size:12.5px; color:#93A9A2; }
 
-  footer{ background:var(--primary-2); color:var(--white); padding:40px 0 20px; text-align:center; font-size:13px; margin-top:60px; }
+  /* ---------------- RESPONSIVE ---------------- */
+  @media (max-width:880px){
+    .nav-links{ display:none; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero h1{ font-size:32px; }
+    .why-grid{ grid-template-columns:1fr; }
+    .footer-grid{ grid-template-columns:1fr; }
+    .service-row{ grid-template-columns:auto 1fr; }
+    .service-meta{ grid-column:1/-1; flex-direction:row; justify-content:space-between; margin-top:14px; }
+    .type-choice{ grid-template-columns:1fr; }
+    .stepper span.t{ display:none; }
+  }
+
+  @media (prefers-reduced-motion:no-preference){
+    .reveal{ opacity:0; transform:translateY(16px); animation:up .7s ease forwards; }
+  }
+  @keyframes up{ to{ opacity:1; transform:none; } }
 </style>
 </head>
 <body>
 
-<header>
+<header id="siteHeader">
   <nav class="wrap">
     <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+        <rect width="34" height="34" rx="9" fill="#123B32"/>
+        <path d="M8 22L14 14L19 18L26 9" stroke="#D99A3F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="26" cy="9" r="2.4" fill="#D99A3F"/>
+      </svg>
       <span class="brand-text">PATH <span>ENGINEERING</span></span>
     </div>
     <ul class="nav-links">
       <li><a href="#hero">الرئيسية</a></li>
+      <li><a href="#services">الخدمات</a></li>
       <li><a href="#register">التسجيل</a></li>
+      <li><a href="#footer">تواصل معنا</a></li>
     </ul>
-    <button class="btn btn-primary" onclick="document.getElementById('register').scrollIntoView()">انضم إلينا</button>
+    <div class="nav-cta">
+      <button class="btn btn-primary">انضم إلينا</button>
+    </div>
   </nav>
 </header>
 
 <section class="hero" id="hero">
-  <div class="wrap">
-    <h1>من التدريب الجامعي إلى الوظيفة الحقيقية</h1>
-    <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي.</p>
-  </div>
-</section>
-
-<!-- SECTION REGISTRATION -->
-<section class="section" id="register">
-  <div class="wrap" style="max-width: 700px;">
-    <div class="register-panel">
-      <h2 style="text-align: center; color: var(--primary); margin-bottom: 8px;">استمارة التسجيل المباشرة</h2>
-      <p style="text-align: center; color: var(--muted); font-size:14px; margin-bottom:24px;">اختر نوع الحساب لتأكيد الحقول المخصصة لرحلتك</p>
-
-      <!-- اختيار نوع الحساب -->
-      <div class="type-choice">
-        <div class="opt picked" onclick="switchRole('student', this)">طالب / خريج</div>
-        <div class="opt" onclick="switchRole('mentor', this)">مرشد / مهندس</div>
-        <div class="opt" onclick="switchRole('company', this)">شركة</div>
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <h1>من التدريب الجامعي<br>إلى الوظيفة الحقيقية</h1>
+      <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي بمنظومة واحدة.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary">سجل الآن</button>
+        <a href="#services" class="btn btn-outline">تعرف على الخدمات</a>
       </div>
+    </div>
 
-      <!-- نموذج التسجيل المربوط بالداتا بيز -->
-      <form id="supabaseForm" onsubmit="handleRegistration(event)">
-        <!-- بيانات مشتركة -->
-        <div class="form-group">
-          <label id="nameLabel">الاسم الكامل *</label>
-          <input type="text" id="fullName" class="form-control" placeholder="أدخل الاسم..." required>
+    <div class="path-visual reveal" style="display:flex; flex-direction:column; gap:26px;">
+      <div class="path-node done">
+        <div class="dot">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3L2 8l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5" stroke="currentColor" stroke-width="1.8"/></svg>
         </div>
-
-        <div class="form-group">
-          <label>البريد الإلكتروني الرسمي *</label>
-          <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+        <div><div class="label">تدريب جامعي</div><div class="sub">بداية الرحلة العملية</div></div>
+      </div>
+      <div class="path-node done">
+        <div class="dot">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 20h16M8 20V10l4-6 4 6v10" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         </div>
-
-        <div class="form-group">
-          <label>كلمة المرور *</label>
-          <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+        <div><div class="label">مشروع تخرج بإرشاد الساعة</div><div class="sub">بناء المشروع بنفسك</div></div>
+      </div>
+      <div class="path-node">
+        <div class="dot">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
-
-        <div class="form-group">
-          <label>رقم الهاتف / الوتس أب</label>
-          <input type="tel" id="phone" class="form-control" placeholder="0791234567">
+        <div><div class="label">تمديد تدريب 3 أشهر</div><div class="sub">خبرة عملية إضافية</div></div>
+      </div>
+      <div class="path-node">
+        <div class="dot">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="8" width="16" height="12" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="1.8"/></svg>
         </div>
-
-        <!-- 1. حقول الطالب -->
-        <div id="studentFields">
-          <div class="form-group">
-            <label>الجامعة</label>
-            <input type="text" id="university" class="form-control" placeholder="مثال: جامعة اليرموك">
-          </div>
-          <!-- فصل التخصص -->
-          <div class="form-group">
-            <label>التخصص الأكاديمي</label>
-            <input type="text" id="major" class="form-control" placeholder="مثال: هندسة الاتصالات">
-          </div>
-          <!-- فصل سنة التخرج -->
-          <div class="form-group">
-            <label>سنة التخرج المتوقعة</label>
-            <select id="gradYear" class="form-control">
-              <option value="">اختر السنة</option>
-              <option value="2024">2024</option>
-              <option value="2025">2025</option>
-              <option value="2026">2026</option>
-              <option value="2027">2027</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- 2. حقول المرشد / المهندس -->
-        <div id="mentorFields" style="display:none;">
-          <div class="form-group">
-            <label>المسمى الوظيفي ومجال الخبرة</label>
-            <input type="text" id="jobTitle" class="form-control" placeholder="مثال: Senior DevOps Engineer">
-          </div>
-          <div class="form-group">
-            <label>سنوات الخبرة العملية</label>
-            <input type="number" id="yearsExp" class="form-control" placeholder="مثال: 6">
-          </div>
-          <div class="form-group">
-            <label>تكلفة الجلسة الإرشادية (بالدينار / لكل ساعة)</label>
-            <input type="number" id="hourlyRate" class="form-control" placeholder="مثال: 25">
-          </div>
-          <div class="form-group">
-            <label>نبذة عن خدمات الإرشاد ومساعدة مشاريع التخرج</label>
-            <textarea id="bio" class="form-control" rows="3" placeholder="اشرح كيف تساعد الطلاب..."></textarea>
-          </div>
-        </div>
-
-        <!-- 3. حقول الشركة -->
-        <div id="companyFields" style="display:none;">
-          <div class="form-group">
-            <label>قطاع عمل الشركة</label>
-            <input type="text" id="industry" class="form-control" placeholder="مثال: برمجيات، طاقة، مقاولات">
-          </div>
-          <div class="form-group">
-            <label>رابط الموقع الإلكتروني للشركة</label>
-            <input type="url" id="website" class="form-control" placeholder="https://company.com">
-          </div>
-        </div>
-
-        <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%; margin-top: 10px;">إكمال التسجيل وإنشاء الحساب</button>
-      </form>
+        <div><div class="label">وظيفة حقيقية</div><div class="sub">نهاية الرحلة، بداية جديدة</div></div>
+      </div>
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="wrap">© 2026 Path Engineering — جميع الحقوق محفوظة</div>
-</footer>
+<section class="section why-section">
+  <div class="wrap">
+    <div class="section-head" style="max-width:680px;">
+      <h2>ليش الطلاب والشركات بيختاروا Path Engineering</h2>
+      <p>مش مجرد منصة تسجيل — منظومة متكاملة ترافقك من أول يوم تدريب لحد ما توقّع عقد التوظيف.</p>
+    </div>
 
-<script>
-  // رابط ومفتاح مشروعك الجاهز بالكامل
-  const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_8SQ-JfcbI2uGBstuTps0ow_hNbaNym8';
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="#fff" stroke-width="1.8"/><path d="M4 20c1.8-4.5 5-6.5 8-6.5s6.2 2 8 6.5" stroke="#fff" stroke-width="1.8"/></svg>
+        </div>
+        <h3>إرشاد من مهندسين حقيقيين، مش محتوى جاهز</h3>
+        <p>كل جلسة إرشاد بالساعة مع مهندس عنده خبرة ميدانية فعلية بمجال مشروعك، بيوجهك خطوة بخطوة بدل ما يحل مكانك.</p>
+      </div>
 
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 20h16M8 20V10l4-6 4 6v10" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>مشروع تخرجك ببصمتك، بضمان النزاهة الأكاديمية</h3>
+        <p>الإرشاد بيساعدك تبني الفكرة وتحل العقبات بنفسك، بدون ما يمس هذا استقلاليتك الأكاديمية أو يشكك بأصالة المشروع.</p>
+      </div>
 
-  let selectedRole = 'student';
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" stroke="#fff" stroke-width="1.8"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" stroke="#fff" stroke-width="1.8"/></svg>
+        </div>
+        <h3>جسر مباشر من التدريب إلى التوظيف الفعلي</h3>
+        <p>الطلاب المتميزين ما بضلوا ينتظروا "خبرة عملية" وهمية — برنامج التمديد المهني بيربطهم مباشرة بشركات جاهزة توظفهم.</p>
+      </div>
 
-  function switchRole(role, el) {
-    selectedRole = role;
-    document.querySelectorAll('.type-choice .opt').forEach(opt => opt.classList.remove('picked'));
-    el.classList.add('picked');
-
-    document.getElementById('studentFields').style.display = role === 'student' ? 'block' : 'none';
-    document.getElementById('mentorFields').style.display = role === 'mentor' ? 'block' : 'none';
-    document.getElementById('companyFields').style.display = role === 'company' ? 'block' : 'none';
-
-    document.getElementById('nameLabel').textContent = role === 'company' ? 'اسم الشركة *' : 'الاسم الكامل *';
-  }
-
-  async function handleRegistration(e) {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = 'جاري الإرسال وحفظ البيانات...';
-
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const fullName = document.getElementById('fullName').value;
-    const phone = document.getElementById('phone').value;
-
-    try {
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-      });
-
-      if (authError) throw authError;
-
-      let profilePayload = {
-        id: authData.user ? authData.user.id : null,
-        full_name: fullName,
-        phone: phone,
-        role: selectedRole
-      };
-
-      if (selectedRole === 'student') {
-        profilePayload.university = document.getElementById('university').value;
-        profilePayload.major = document.getElementById('major').value;
-        profilePayload.graduation_year = document.getElementById('gradYear').value;
-      } else if (selectedRole === 'mentor') {
-        profilePayload.job_title = document.getElementById('jobTitle').value;
-        profilePayload.years_experience = document.getElementById('yearsExp').value;
-        profilePayload.hourly_rate = document.getElementById('hourlyRate').value;
-        profilePayload.bio = document.getElementById('bio').value;
-      } else if (selectedRole === 'company') {
-        profilePayload.industry = document.getElementById('industry').value;
-        profilePayload.website = document.getElementById('website').value;
-      }
-
-      const { error: dbError } = await supabase.from('profiles').insert([profilePayload]);
-
-      if (dbError) throw dbError;
-
-      alert('تم التسجيل بنجاح وتخزين البيانات في Supabase!');
-      document.getElementById('supabaseForm').reset();
-
-    } catch (err) {
-      alert('حدث خطأ أثناء التسجيل: ' + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'إكمال التسجيل وإنشاء الحساب';
-    }
-  }
-</script>
-
-</body>
-</html>            
-
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" stroke
