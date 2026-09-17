@@ -1,580 +1,738 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Path Engineering | جسر مهندسي المستقبل</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Engineering | من التدريب الجامعي إلى الخبرة والوظيفة</title>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #178574;
+            --primary-hover: #116458;
+            --secondary-color: #0f3846;
+            --accent-color: #20b2aa;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01);
+            --transition: all 0.3s ease;
+        }
 
-<!-- مكتبة Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
 
-<style>
-  :root{
-    --primary:#123B32;
-    --primary-2:#0D2C26;
-    --mint:#2F8F72;
-    --gold:#D99A3F;
-    --bg:#F7FAF9;
-    --ink:#16241F;
-    --muted:#5C6E68;
-    --line:#E1EAE6;
-    --white:#FFFFFF;
-    --radius-lg:22px;
-    --radius-md:14px;
-    --maxw:1180px;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    font-family:'Tajawal', sans-serif;
-    background:var(--bg);
-    color:var(--ink);
-    line-height:1.7;
-  }
-  h1,h2,h3,h4{ font-family:'Cairo', sans-serif; margin:0; }
-  p{margin:0;}
-  a{ text-decoration:none; color:inherit; }
-  img,svg{display:block;}
-  :focus-visible{ outline:3px solid var(--gold); outline-offset:3px; border-radius:6px; }
-  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
 
-  /* NAV */
-  header{
-    position:sticky; top:0; z-index:100;
-    background:rgba(247,250,249,0.95);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid transparent;
-    transition:border-color .25s ease, background .25s ease;
-  }
-  header.scrolled{ border-color:var(--line); background:rgba(247,250,249,0.98); }
-  nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
-  .brand{ display:flex; align-items:center; gap:10px; }
-  .brand svg{ flex:none; }
-  .brand-text{ font-family:'Cairo',sans-serif; font-weight:800; font-size:19px; color:var(--primary); }
-  .brand-text span{ color:var(--mint); }
-  .nav-links{ display:flex; gap:34px; list-style:none; margin:0; padding:0; }
-  .nav-links a{ font-size:15px; font-weight:500; color:var(--ink); position:relative; padding:6px 2px; }
-  .nav-links a::after{
-    content:""; position:absolute; right:0; left:0; bottom:-2px; height:2px;
-    background:var(--mint); transform:scaleX(0); transform-origin:left; transition:transform .2s ease;
-  }
-  .nav-links a:hover::after{ transform:scaleX(1); }
-  .btn{
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    font-family:'Tajawal',sans-serif; font-weight:700; font-size:15px;
-    padding:12px 26px; border-radius:12px; cursor:pointer; border:none;
-    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
-  }
-  .btn-primary{ background:var(--mint); color:var(--white); box-shadow:0 10px 22px -10px rgba(47,143,114,.55); }
-  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 26px -10px rgba(47,143,114,.6); }
-  .btn-outline{ background:transparent; color:var(--primary); border:1.5px solid var(--primary); }
-  .btn-outline:hover{ background:var(--primary); color:var(--white); }
-  .nav-cta{ display:flex; align-items:center; gap:16px; }
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-  /* HERO */
-  .hero{ padding:60px 0 40px; }
-  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; }
-  .hero h1{ font-size:44px; line-height:1.28; font-weight:800; color:var(--primary); margin-bottom:20px; }
-  .hero p.lede{ font-size:17px; color:var(--muted); max-width:46ch; margin-bottom:32px; }
-  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+        /* Navbar */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-  .path-visual{ position:relative; }
-  .path-node{ display:flex; align-items:center; gap:14px; }
-  .path-node .dot{
-    width:46px; height:46px; border-radius:50%; flex:none;
-    display:flex; align-items:center; justify-content:center;
-    background:var(--white); border:2px solid var(--mint); color:var(--primary);
-  }
-  .path-node.done .dot{ background:var(--primary); border-color:var(--primary); color:var(--white); }
-  .path-node .label{ font-weight:700; font-size:15px; color:var(--ink); }
-  .path-node .sub{ font-size:12.5px; color:var(--muted); margin-top:2px; }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
 
-  /* SECTIONS */
-  .section{ padding:64px 0; }
-  .section-head{ max-width:640px; margin-bottom:40px; }
-  .section-head h2{ font-size:32px; color:var(--primary); font-weight:800; margin-bottom:12px; }
-  .section-head p{ color:var(--muted); font-size:16px; }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
 
-  /* SERVICES */
-  .service-row{
-    display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:32px;
-    padding:32px 0; border-top:1px solid var(--line);
-    transition:background .2s ease;
-  }
-  .service-row:last-child{ border-bottom:1px solid var(--line); }
-  .service-row:hover{ background:rgba(47,143,114,0.03); }
-  .service-icon{
-    width:64px; height:64px; border-radius:18px; flex:none;
-    display:flex; align-items:center; justify-content:center; color:var(--white);
-  }
-  .service-row:nth-child(odd) .service-icon{ background:var(--primary); }
-  .service-row:nth-child(even) .service-icon{ background:var(--mint); }
-  .service-body h3{ font-size:19px; color:var(--ink); margin-bottom:8px; }
-  .service-body p{ color:var(--muted); font-size:14.5px; max-width:56ch; }
-  .service-meta{ display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
-  .badge{
-    font-size:12.5px; font-weight:700; padding:6px 14px; border-radius:20px;
-    background:var(--gold); color:var(--primary-2); white-space:nowrap;
-  }
-  .service-link{ display:flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--primary); }
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--secondary-color);
+            letter-spacing: -0.5px;
+        }
 
-  /* WHY-US */
-  .why-section{ background:var(--white); }
-  .why-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:28px; }
-  .why-card{
-    padding:30px 26px; border-radius:var(--radius-md); background:var(--bg);
-    border:1px solid var(--line); transition:transform .18s ease, box-shadow .18s ease;
-  }
-  .why-card:hover{ transform:translateY(-4px); box-shadow:0 20px 40px -28px rgba(18,59,50,.35); }
-  .why-icon{
-    width:52px; height:52px; border-radius:14px; background:var(--primary);
-    display:flex; align-items:center; justify-content:center; margin-bottom:18px;
-  }
-  .why-card:nth-child(3n+2) .why-icon{ background:var(--mint); }
-  .why-card:nth-child(3n) .why-icon{ background:var(--gold); }
-  .why-card h3{ font-family:'Tajawal',sans-serif; font-weight:700; font-size:16.5px; color:var(--ink); margin-bottom:10px; line-height:1.5; }
-  .why-card p{ font-size:13.8px; color:var(--muted); }
+        .logo-text span {
+            color: var(--primary-color);
+        }
 
-  /* REGISTRATION STEPPER & INPUTS */
-  .register-panel{
-    background:var(--white); border:1px solid var(--line); border-radius:var(--radius-lg);
-    padding:36px; box-shadow:0 30px 60px -40px rgba(18,59,50,.25);
-    position:relative; z-index:10;
-  }
-  .stepper{ display:flex; justify-content:space-between; position:relative; margin-bottom:36px; }
-  .stepper::before{
-    content:""; position:absolute; top:19px; right:20px; left:20px; height:2px; background:var(--line); z-index:0;
-  }
-  .step{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; background:none; border:none; font-family:inherit; }
-  .step .num{
-    width:40px; height:40px; border-radius:50%; background:var(--white); border:2px solid var(--line);
-    display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--muted);
-    transition:all .2s ease;
-  }
-  .step span.t{ font-size:12.5px; color:var(--muted); font-weight:700; text-align:center; }
-  .step.active .num{ background:var(--primary); border-color:var(--primary); color:var(--white); }
-  .step.active span.t{ color:var(--primary); }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
 
-  .step-panel{ display:none; }
-  .step-panel.active{ display:block; }
-  .step-panel h4{ font-size:19px; color:var(--primary); margin-bottom:16px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            transition: var(--transition);
+        }
 
-  .real-input{
-    width:100%;
-    height:48px; border:1.5px solid var(--line); border-radius:10px; background:var(--bg);
-    padding:0 16px; color:var(--ink); font-family:'Tajawal', sans-serif; font-size:14px; margin-bottom:16px;
-    transition:border-color .2s ease, background .2s ease;
-  }
-  .real-input:focus{ outline:none; border-color:var(--mint); background:var(--white); }
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
 
-  .type-choice{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
-  .type-choice .opt{
-    border:1.5px solid var(--line); border-radius:12px; padding:16px 10px; text-align:center; font-size:14px; font-weight:700; color:var(--ink);
-    transition:all .15s ease; cursor:pointer;
-  }
-  .type-choice .opt.picked{ border-color:var(--mint); background:rgba(47,143,114,.08); color:var(--primary); }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
 
-  .form-status{
-    margin-top:20px; padding:14px; border-radius:10px; font-size:14px; font-weight:700; text-align:center; display:none;
-  }
-  .form-status.success{ background:#E6F4EA; color:#137333; display:block; }
-  .form-status.error{ background:#FCE8E6; color:#C5221F; display:block; }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
 
-  /* FOOTER */
-  footer{ background:var(--primary-2); color:var(--white); padding:56px 0 28px; }
-  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; margin-bottom:36px; }
-  footer h5{ color:var(--gold); font-size:14.5px; font-weight:700; margin-bottom:16px; }
-  footer .brand-text{ color:var(--white); }
-  footer .brand-text span{ color:var(--gold); }
-  footer p.lede{ color:#BFD3CC; font-size:14px; margin-top:14px; max-width:38ch; }
-  footer ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px; }
-  footer a{ color:#D8E6E1; font-size:14px; }
-  footer a:hover{ color:var(--gold); }
-  .footer-bottom{ border-top:1px solid rgba(255,255,255,.12); padding-top:22px; text-align:center; font-size:12.5px; color:#93A9A2; }
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
 
-  /* RESPONSIVE */
-  @media (max-width:880px){
-    .wrap{ padding:0 18px; }
-    .nav-links{ display:none; }
-    .btn-primary{ padding:10px 18px; font-size:14px; }
-    .hero{ padding:36px 0; }
-    .hero-grid{ grid-template-columns:1fr; gap:36px; }
-    .hero h1{ font-size:30px; }
-    .why-grid{ grid-template-columns:1fr; }
-    .footer-grid{ grid-template-columns:1fr; }
-    .service-row{ grid-template-columns:auto 1fr; }
-    .service-meta{ grid-column:1/-1; flex-direction:row; justify-content:space-between; margin-top:10px; }
-    .type-choice{ grid-template-columns:1fr; }
-    .stepper span.t{ display:none; }
-    .register-panel{ padding:22px 18px; }
-  }
-</style>
+        .btn-outline {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0 3rem;
+            background: linear-gradient(135deg, rgba(23, 133, 116, 0.05) 0%, rgba(15, 56, 70, 0.05) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 2.8rem;
+            color: var(--secondary-color);
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-graphic {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Path Line Visualizer */
+        .path-visualizer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .path-visualizer::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(to left, var(--primary-color), var(--secondary-color));
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .path-node {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 4px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            font-weight: 700;
+            color: var(--secondary-color);
+            transition: var(--transition);
+        }
+
+        .path-node:hover {
+            transform: scale(1.15);
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        /* Features Section */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: rgba(23, 133, 116, 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .card ul li {
+            position: relative;
+            padding-right: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .card ul li::before {
+            content: '✓';
+            position: absolute;
+            right: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Tabs Section for Integrity Policy */
+        .policy-container {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .policy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .allowed-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .allowed-box h4 {
+            color: #166534;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .forbidden-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .forbidden-box h4 {
+            color: #991b1b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Process Steps */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .step-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border-top: 4px solid var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .step-number {
+            width: 35px;
+            height: 35px;
+            background: var(--secondary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+        }
+
+        /* Equity / Stakeholders Table */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        th, td {
+            padding: 1rem 1.5rem;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--secondary-color);
+            color: var(--white);
+        }
+
+        /* Contact Section */
+        .contact-card {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: var(--white);
+            border-radius: 16px;
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-item i {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary-color);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-grid, .policy-grid, .contact-card {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<header id="siteHeader">
-  <nav class="wrap">
-    <div class="brand">
-      <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-        <rect width="34" height="34" rx="9" fill="#123B32"/>
-        <path d="M8 22L14 14L19 18L26 9" stroke="#D99A3F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="26" cy="9" r="2.4" fill="#D99A3F"/>
-      </svg>
-      <span class="brand-text">PATH <span>ENGINEERING</span></span>
-    </div>
-    <ul class="nav-links">
-      <li><a href="#hero">الرئيسية</a></li>
-      <li><a href="#services">الخدمات</a></li>
-      <li><a href="#register">التسجيل</a></li>
-      <li><a href="#footer">تواصل معنا</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="#register" class="btn btn-primary">انضم إلينا</a>
-    </div>
-  </nav>
-</header>
-
-<section class="hero" id="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <h1>من التدريب الجامعي<br>إلى الوظيفة الحقيقية</h1>
-      <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي بمنظومة واحدة.</p>
-      <div class="hero-actions">
-        <a href="#register" class="btn btn-primary">سجل الآن</a>
-        <a href="#services" class="btn btn-outline">تعرف على الخدمات</a>
-      </div>
-    </div>
-
-    <div class="path-visual" style="display:flex; flex-direction:column; gap:20px;">
-      <div class="path-node done">
-        <div class="dot">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3L2 8l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5" stroke="currentColor" stroke-width="1.8"/></svg>
-        </div>
-        <div><div class="label">تدريب جامعي</div><div class="sub">بداية الرحلة العملية</div></div>
-      </div>
-      <div class="path-node done">
-        <div class="dot">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 20h16M8 20V10l4-6 4 6v10" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        </div>
-        <div><div class="label">مشروع تخرج بإرشاد الساعة</div><div class="sub">بناء المشروع بنفسك</div></div>
-      </div>
-      <div class="path-node">
-        <div class="dot">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </div>
-        <div><div class="label">تمديد تدريب 3 أشهر</div><div class="sub">خبرة عملية إضافية</div></div>
-      </div>
-      <div class="path-node">
-        <div class="dot">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="8" width="16" height="12" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="1.8"/></svg>
-        </div>
-        <div><div class="label">وظيفة حقيقية</div><div class="sub">نهاية الرحلة، بداية جديدة</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section why-section">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>ليش الطلاب والشركات بيختاروا Path Engineering</h2>
-      <p>مش مجرد منصة تسجيل — منظومة متكاملة ترافقك من أول يوم تدريب لحد ما توقّع عقد التوظيف.</p>
-    </div>
-
-    <div class="why-grid">
-      <div class="why-card">
-        <div class="why-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="#fff" stroke-width="1.8"/><path d="M4 20c1.8-4.5 5-6.5 8-6.5s6.2 2 8 6.5" stroke="#fff" stroke-width="1.8"/></svg>
-        </div>
-        <h3>إرشاد من مهندسين حقيقيين، مش محتوى جاهز</h3>
-        <p>كل جلسة إرشاد بالساعة مع مهندس عنده خبرة ميدانية فعلية بمجال مشروعك، بيوجهك خطوة بخطوة بدل ما يحل مكانك.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 20h16M8 20V10l4-6 4 6v10" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>مشروع تخرجك ببصمتك، بضمان النزاهة الأكاديمية</h3>
-        <p>الإرشاد بيساعدك تبني الفكرة وتحل العقبات بنفسك، بدون ما يمس هذا استقلاليتك الأكاديمية أو يشكك بأصالة المشروع.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" stroke="#fff" stroke-width="1.8"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" stroke="#fff" stroke-width="1.8"/></svg>
-        </div>
-        <h3>جسر مباشر من التدريب إلى التوظيف الفعلي</h3>
-        <p>الطلاب المتميزين ما بضلوا ينتظروا "خبرة عملية" وهمية — برنامج التمديد المهني بيربطهم مباشرة بشركات جاهزة توظفهم.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="services" style="background:var(--white);">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>خدمات المنصة الرئيسية</h2>
-      <p>اضغط على أي خدمة للتسجيل والاشتراك المباشر بها.</p>
-    </div>
-
-    <div class="service-row">
-      <div class="service-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 21V9l9-6 9 6v12" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke="#fff" stroke-width="1.8"/></svg>
-      </div>
-      <div class="service-body">
-        <h3>إدارة التدريب الميداني والتأهيل</h3>
-        <p>منظومة موحدة للشركات لنشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء.</p>
-      </div>
-      <div class="service-meta">
-        <span class="badge">للشركات</span>
-        <a class="service-link" href="#register">التسجيل كممثل شركة</a>
-      </div>
-    </div>
-
-    <div class="service-row">
-      <div class="service-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="#fff" stroke-width="1.8"/><path d="M4 20c1.8-4.5 5-6.5 8-6.5s6.2 2 8 6.5" stroke="#fff" stroke-width="1.8"/></svg>
-      </div>
-      <div class="service-body">
-        <h3>إرشاد مشروع التخرج (بالساعة)</h3>
-        <p>جلسات إرشادية وتوجيهية مع خبراء لمساعدة الطالب على بناء مشروعه بنفسه وضمان النزاهة الأكاديمية.</p>
-      </div>
-      <div class="service-meta">
-        <span class="badge">بالساعة</span>
-        <a class="service-link" href="#register">طلب الخدمة كطالب</a>
-      </div>
-    </div>
-
-    <div class="service-row">
-      <div class="service-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" stroke="#fff" stroke-width="1.8"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" stroke="#fff" stroke-width="1.8"/></svg>
-      </div>
-      <div class="service-body">
-        <h3>برنامج التمديد المهني</h3>
-        <p>ربط الطلاب المتميزين بشركات لتمديد تدريبهم 3 أشهر إضافية لزيادة فرص التوظيف وتقليل مخاطر التوظيف الجديد.</p>
-      </div>
-      <div class="service-meta">
-        <span class="badge">3 أشهر</span>
-        <a class="service-link" href="#register">الانضمام كمرشد/مهندس</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- REGISTRATION FORM -->
-<section class="section" id="register">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>استمارة التسجيل والاستبيان</h2>
-      <p>يرجى تزويدنا بالمعلومات الدقيقة لتقديم أفضل خدمة — العملية مقسّمة على أربع خطوات بسيطة.</p>
-    </div>
-
-    <div class="register-panel">
-      <div class="stepper">
-        <button type="button" class="step active" data-step="1"><span class="num">١</span><span class="t">نوع الحساب</span></button>
-        <button type="button" class="step" data-step="2"><span class="num">٢</span><span class="t">البيانات الأساسية</span></button>
-        <button type="button" class="step" data-step="3"><span class="num">٣</span><span class="t">تفاصيل إضافية</span></button>
-        <button type="button" class="step" data-step="4"><span class="num">٤</span><span class="t">تأكيد وإرسال</span></button>
-      </div>
-
-      <form id="registrationForm" novalidate>
-        <div class="step-panels">
-          <!-- الخطوة 1 -->
-          <div class="step-panel active" data-panel="1">
-            <h4>ما هو نوع حسابك؟</h4>
-            <div class="type-choice">
-              <div class="opt picked" data-type="طالب">طالب</div>
-              <div class="opt" data-type="شركة">شركة</div>
-              <div class="opt" data-type="مرشد / مهندس">مرشد / مهندس</div>
+    <!-- Header / Navbar -->
+    <header>
+        <div class="container navbar">
+            <a href="#" class="logo-container">
+                <i class="fa-solid fa-chart-line fa-2x" style="color: var(--primary-color);"></i>
+                <div class="logo-text">PATH <span>ENGINEERING</span></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#about">عن المنصة</a></li>
+                <li><a href="#services">خدماتنا</a></li>
+                <li><a href="#journey">رحلة الطالب</a></li>
+                <li><a href="#structure">هيكلية المشروع</a></li>
+                <li><a href="#contact">تواصل معنا</a></li>
+            </ul>
+            <div>
+                <a href="#contact" class="btn btn-primary">ابدأ الآن</a>
             </div>
-            <input type="hidden" id="account_type" value="طالب">
-            <button type="button" class="btn btn-primary" onclick="goToStep(2)">التالي: البيانات الأساسية</button>
-          </div>
-
-          <!-- الخطوة 2 -->
-          <div class="step-panel" data-panel="2">
-            <h4>البيانات الأساسية</h4>
-            <input type="text" id="full_name" class="real-input" placeholder="الاسم الكامل *" required>
-            <input type="email" id="email" class="real-input" placeholder="البريد الإلكتروني الرسمي *" required>
-            <input type="tel" id="phone" class="real-input" placeholder="رقم الهاتف (مثال: 0791234567) *" required>
-            <div style="display:flex; gap:10px;">
-              <button type="button" class="btn btn-outline" onclick="goToStep(1)">السابق</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(3)">التالي: تفاصيل إضافية</button>
-            </div>
-          </div>
-
-          <!-- الخطوة 3 (تم الفصل هنا) -->
-          <div class="step-panel" data-panel="3">
-            <h4>تفاصيل إضافية</h4>
-            <input type="text" id="city" class="real-input" placeholder="مكان الإقامة (المدينة)">
-            <input type="text" id="major" class="real-input" placeholder="التخصص الأكاديمي">
-            <input type="text" id="graduation_year" class="real-input" placeholder="سنة التخرج المتوقعة (مثال: 2026)">
-            <div style="display:flex; gap:10px;">
-              <button type="button" class="btn btn-outline" onclick="goToStep(2)">السابق</button>
-              <button type="button" class="btn btn-primary" onclick="goToStep(4)">التالي: مراجعة وإرسال</button>
-            </div>
-          </div>
-
-          <!-- الخطوة 4 -->
-          <div class="step-panel" data-panel="4">
-            <h4>مراجعة سريعة قبل الإرسال</h4>
-            <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">تأكد أن كل البيانات صحيحة، ثم اضغط الزر أدناه لحفظ تسجيلك وتفعيل الطلب.</p>
-            <div style="display:flex; gap:10px;">
-              <button type="button" class="btn btn-outline" onclick="goToStep(3)">السابق</button>
-              <button type="submit" id="submitBtn" class="btn btn-primary" style="flex:1;">إرسال طلب التسجيل وتفعيل الحساب</button>
-            </div>
-          </div>
         </div>
-      </form>
+    </header>
 
-      <div id="formStatus" class="form-status"></div>
-    </div>
-  </div>
-</section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <h1>من التدريب الجامعي إلى الخبرة والوظيفة الحقيقية</h1>
+                <p>منصة رقمية متكاملة تنظم إرشاد مشاريع التخرج الهندسية، وتدير التدريب الميداني والاختبارات الفنية مع ربط المتفوقين بفرص تمديد مهني وتوظيف مباشر.</p>
+                <div class="hero-buttons">
+                    <a href="#services" class="btn btn-primary">استكشف الخدمات</a>
+                    <a href="#journey" class="btn btn-outline">كيف نعمل؟</a>
+                </div>
+            </div>
+            <div class="hero-graphic">
+                <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">مسار النمو المهني للهواة والمبدعين</h3>
+                <div class="path-visualizer">
+                    <div class="path-node" title="مشروع التخرج">1</div>
+                    <div class="path-node" title="التدريب الميداني">2</div>
+                    <div class="path-node" title="التمديد المهني">3</div>
+                    <div class="path-node" title="الوظيفة">4</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted);">
+                    <span>مشروع التخرج</span>
+                    <span>التدريب الميداني</span>
+                    <span>التمديد (3 أشهر)</span>
+                    <span>سوق العمل</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<footer id="footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div>
-        <span class="brand-text">PATH <span>ENGINEERING</span></span>
-        <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي.</p>
-      </div>
-      <div>
-        <h5>روابط سريعة</h5>
-        <ul>
-          <li><a href="#hero">الرئيسية</a></li>
-          <li><a href="#services">الخدمات</a></li>
-          <li><a href="#register">التسجيل</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>تواصل معنا</h5>
-        <ul>
-          <li><a href="mailto:info@pathengineering.com">info@pathengineering.com</a></li>
-          <li><a href="#">فريق الدعم والمساندة</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">© 2026 Path Engineering — جميع الحقوق محفوظة</div>
-  </div>
-</footer>
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>المشاكل والحلول المبتكرة</h2>
+                <p>نسد الفجوة بين التعليم الأكاديمي والمتطلبات الفعلية لسوق العمل الهندسي</p>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h3>مشكلة مشاريع التخرج</h3>
+                    <p>صعوبة تنفيذ مشروع حقيقي تدفع بعض الطلاب لشراء مشاريع جاهزة دون اكتساب خبرة حقيقية تؤهلهم للمناقشة وسوق العمل.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-briefcase"></i></div>
+                    <h3>مشكلة التدريب الميداني</h3>
+                    <p>انتهاء التدريب بمجرد إكمال الساعات دون وجود نظام موحد يحفظ التقييمات أو يقدم مساراً واضحاً للتوظيف.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-building"></i></div>
+                    <h3>تحديات الشركات</h3>
+                    <p>صعوبة اختيار الكفاءات المناسبة، متابعة المتدربين، وتنفيذ الاختبارات الفنية بشكل موثوق وسلس.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>
-  // 1. اتصالات Supabase
-  const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nZXN2ZGJzZ3B0ZmlmbGxkdXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2MTgzMjh9.p615kM4OatK_K6Y_J6I15o_2k1E8f_fK4g5k33_k'; 
-  
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <!-- Services Section -->
+    <section id="services" class="section" style="background-color: var(--white);">
+        <div class="container">
+            <div class="section-title">
+                <h2>خدمات المنصة الرئيسية</h2>
+                <p>حلول رقمية متكاملة دون الحاجة لمقر أو تكاليف تشغيلية تعجيزية</p>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-user-tie"></i></div>
+                    <h3>1. إرشاد مشروع التخرج (بالساعة)</h3>
+                    <p>ربط الطالب بمرشد مختص يعمل معه بالساعة للتوجيه، تقسيم العمل، واكتشاف الأخطاء.</p>
+                    <ul>
+                        <li>جلسات حية ومراجعات دورية</li>
+                        <li>بناء المشروع بيد الطالب</li>
+                        <li>استعداد كامل للمناقشة</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <h3>2. إدارة التدريب والتقييمات</h3>
+                    <p>تمكين الشركات من نشر فرص التدريب، متابعة المهام الأسبوعية، إجراء اختبارات فنية وتأهيلية.</p>
+                    <ul>
+                        <li>تقارير أداء دورية موثقة</li>
+                        <li>اختبارات عمليّة ومنطقية</li>
+                        <li>توفير وقت البحث والتقييم</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-award"></i></div>
+                    <h3>3. برنامج التمديد المهني (3 أشهر)</h3>
+                    <p>برنامج إضافي اختيار يربط المتدربين المتميزين بالشركات للحصول على خبرة 9 أشهر إجمالاً.</p>
+                    <ul>
+                        <li>فرصة تدريب مدفوع / دوام جزئي</li>
+                        <li>تقليل مخاطر التوظيف للشركات</li>
+                        <li>سيرة ذاتية قوية وموثقة</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  // 2. التنقل بين الخطوات
-  function goToStep(stepNum) {
-    if (stepNum > 2) {
-      const fullName = document.getElementById('full_name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
+    <!-- Academic Integrity Policy Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>حماية النزاهة الأكاديمية</h2>
+                <p>المنصة لا تنفذ المشاريع نيابة عن الطالب بل توجهه لبنائها بنفسه</p>
+            </div>
+            <div class="policy-container">
+                <div class="policy-grid">
+                    <div class="allowed-box">
+                        <h4><i class="fa-solid fa-circle-check"></i> ما يسمح به للمرشد</h4>
+                        <ul>
+                            <li>شرح المفاهيم واقتراح مصادر التعلم</li>
+                            <li>المساعدة في تقسيم مراحل المشروع</li>
+                            <li>مراجعة التصاميم، المخططات والكود</li>
+                            <li>اكتشاف الأخطاء والتدريب على العرض والمناقشة</li>
+                        </ul>
+                    </div>
+                    <div class="forbidden-box">
+                        <h4><i class="fa-solid fa-circle-xmark"></i> ما يُمنع منعاً باتاً</h4>
+                        <ul>
+                            <li>تنفيذ المشروع كاملاً بدل الطالب</li>
+                            <li>بيع مشاريع جاهزة أو تسليم ملفات منسوخة</li>
+                            <li>كتابة الأجزاء الرئيسية نيابة عن الطالب</li>
+                            <li>ضمان علامة معينة في الجامعة</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      if (!fullName || !email || !phone) {
-        alert('يرجى تعبئة الحقول الأساسية (الاسم، البريد الإلكتروني، والهاتف) في الخطوة 2 أولاً.');
-        goToStep(2);
-        return;
-      }
-    }
+    <!-- Student Journey -->
+    <section id="journey" class="section" style="background: var(--white);">
+        <div class="container">
+            <div class="section-title">
+                <h2>رحلة الطالب على المنصة</h2>
+                <p>خطوات واضحة نحو بناء مسار مهني ناجح</p>
+            </div>
+            <div class="process-steps">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <h4>إنشاء الحساب</h4>
+                    <p>تحديد التخصص وفكرة المشروع أو البحث عن فرصة تدريب.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <h4>اختيار المرشد</h4>
+                    <p>استعراض المهارات، سعر الساعة، وحجز الجلسات المناسبة.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <h4>التطبيق والرفع</h4>
+                    <p>رفع الملفات والمراحل وتلقي التوجيهات الفنية.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <h4>التدريب والتمديد</h4>
+                    <p>الالتحاق بشركة، بناء سجل التقييمات، والانتقال للوظيفة.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    const steps = document.querySelectorAll('.step');
-    const panels = document.querySelectorAll('.step-panel');
-    
-    steps.forEach(b => b.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
+    <!-- Equity and Management Structure Section -->
+    <section id="structure" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>هيكلية وتوزيع ملكية المشروع</h2>
+                <p>توزيع شفاف للحصص يراعي حقوق الإدارة والشركاء والموظفين</p>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الفئة / الدور</th>
+                            <th>الاسم</th>
+                            <th>نسبة الحصة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>مدير المشروع</strong></td>
+                            <td>سنابل عبدالله علي بني إسماعيل</td>
+                            <td>ضمن حصة الشركاء (90%)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>الشريك الأول / الشركاء</strong></td>
+                            <td>تُستكمل عند الاعتماد النهائي</td>
+                            <td>مدرجة ضمن باقي نسبة المالكين</td>
+                        </tr>
+                        <tr>
+                            <td><strong>الموظفون (مخصص ثابت)</strong></td>
+                            <td>خيار ملكية الموظفين (ESOP)</td>
+                            <td><strong>10% ثابتة</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>إجمالي حصة الشركاء/المالكين</strong></td>
+                            <td>إدارة وشركاء المشروع</td>
+                            <td><strong>90%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 
-    document.querySelector(`.step[data-step="${stepNum}"]`).classList.add('active');
-    document.querySelector(`.step-panel[data-panel="${stepNum}"]`).classList.add('active');
-  }
+    <!-- Contact & Footer -->
+    <section id="contact" class="section">
+        <div class="container">
+            <div class="contact-card">
+                <div class="contact-info">
+                    <h3>تواصل معنا للبدء أو الاستثمار</h3>
+                    <p style="margin-bottom: 1.5rem; opacity: 0.9;">نرحب بالطلاب، المرشدين، والشركات الراغبة في الانضمام للنسخة الأولى من المشروع.</p>
+                    
+                    <div class="contact-item">
+                        <i class="fa-solid fa-user"></i>
+                        <span><strong>مدير المشروع:</strong> سنابل عبدالله علي بني إسماعيل</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span><strong>رقم الهاتف:</strong> 0790800487</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span><strong>البريد الإلكتروني:</strong> Sanabelababneh@gmail.com</span>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px;">
+                    <h4 style="margin-bottom: 1rem;">سجل اهتمامك الآن</h4>
+                    <form onsubmit="event.preventDefault(); alert('تم استلام طلبك بنجاح! سنتواصل معك قريباً.');">
+                        <input type="text" placeholder="الاسم الكامل" style="width:100%; padding: 0.8rem; margin-bottom: 0.8rem; border-radius: 6px; border:none;" required>
+                        <input type="email" placeholder="البريد الإلكتروني" style="width:100%; padding: 0.8rem; margin-bottom: 0.8rem; border-radius: 6px; border:none;" required>
+                        <select style="width:100%; padding: 0.8rem; margin-bottom: 0.8rem; border-radius: 6px; border:none;" required>
+                            <option value="">أنا...</option>
+                            <option value="student">طالب هندسة</option>
+                            <option value="mentor">مرشد مهني / مهندس</option>
+                            <option value="company">ممثل شركة</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">إرسال الطلب</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  document.querySelectorAll('.step').forEach(btn => {
-    btn.addEventListener('click', () => {
-      goToStep(parseInt(btn.dataset.step));
-    });
-  });
+    <footer>
+        <div class="container">
+            <p>جميع الحقوق محفوظة &copy; 2026 - Path Engineering (من التدريب الجامعي إلى الخبرة والوظيفة)</p>
+        </div>
+    </footer>
 
-  document.querySelectorAll('.type-choice .opt').forEach(opt => {
-    opt.addEventListener('click', () => {
-      document.querySelectorAll('.type-choice .opt').forEach(o => o.classList.remove('picked'));
-      opt.classList.add('picked');
-      document.getElementById('account_type').value = opt.dataset.type;
-    });
-  });
-
-  // 3. دالة الحفظ والإرسال المحدثة
-  const registrationForm = document.getElementById('registrationForm');
-  const formStatus = document.getElementById('formStatus');
-  const submitBtn = document.getElementById('submitBtn');
-
-  registrationForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const fullName = document.getElementById('full_name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-
-    if (!fullName || !email || !phone) {
-      alert('يرجى تعبئة جميع الحقول المطلوبة قبل الإرسال.');
-      goToStep(2);
-      return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.innerText = 'جاري تسجيل الحساب وإرسال البيانات...';
-    formStatus.className = 'form-status';
-    formStatus.style.display = 'none';
-
-    // ندمج التخصص وسنة التخرج لإرسالهما لعمود major المسجل في قاعدة البيانات دون مشاكل
-    const majorText = document.getElementById('major').value.trim();
-    const gradYearText = document.getElementById('graduation_year').value.trim();
-    const combinedMajor = gradYearText ? `${majorText} (تخرج: ${gradYearText})` : majorText;
-
-    const formData = {
-      account_type: document.getElementById('account_type').value,
-      full_name: fullName,
-      email: email,
-      phone: phone,
-      city: document.getElementById('city').value.trim(),
-      major: combinedMajor
-    };
-
-    try {
-      const { data, error } = await supabaseClient
-        .from('registrations')
-        .insert([formData]);
-
-      if (error) {
-        throw error;
-      }
-
-      formStatus.innerText = '✓ تم تسجيل الحساب وإرسال طلبك بنجاح! تم حفظ البيانات في قاعدة البيانات.';
-      formStatus.classList.add('success');
-      registrationForm.reset();
-      
-      // التمرير التلقائي لمشاهدة رسالة النجاح بوضوح
-      formStatus.scrollIntoView({ behavior: 'smooth' });
-
-    } catch (err) {
-      console.error('Supabase Error:', err);
-      formStatus.innerText = 'تنبيه: تعذر إتمام الإرسال. تأكدي من تفعيل مشروع Supabase وإلغاء إيقافه المؤقت (Unpause)، ومنح صلاحية الإضافة للجدول RLS.';
-      formStatus.classList.add('error');
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerText = 'إرسال طلب التسجيل وتفعيل الحساب';
-    }
-  });
-
-  const header = document.getElementById('siteHeader');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 8);
-  });
-</script>
-
+    <script>
+        // Smooth Scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
-</html>
-                  
+  </html>       
+      
