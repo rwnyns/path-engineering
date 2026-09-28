@@ -71,19 +71,16 @@
   .btn-ghost-light{ background:transparent; color:var(--white); border:1.5px solid rgba(255,255,255,.5); }
   .btn-ghost-light:hover{ background:rgba(255,255,255,.12); border-color:var(--white); }
   .nav-cta{ display:flex; align-items:center; gap:16px; }
-  .burger{ display:none; }
 
   /* ---------------- HERO ---------------- */
   .hero{ padding:76px 0 60px; }
   .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; }
-  .eyebrow-free{ font-size:14px; color:var(--mint); font-weight:700; margin-bottom:14px; }
   .hero h1{ font-size:44px; line-height:1.28; font-weight:800; color:var(--primary); margin-bottom:20px; }
   .hero p.lede{ font-size:17px; color:var(--muted); max-width:46ch; margin-bottom:32px; }
   .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
 
   /* path visual */
   .path-visual{ position:relative; }
-  .path-visual svg{ width:100%; height:auto; }
   .path-node{ display:flex; align-items:center; gap:14px; }
   .path-node .dot{
     width:46px; height:46px; border-radius:50%; flex:none;
@@ -100,7 +97,7 @@
   .section-head h2{ font-size:32px; color:var(--primary); font-weight:800; margin-bottom:12px; }
   .section-head p{ color:var(--muted); font-size:16px; }
 
-  /* ---------------- SERVICES (row list, not identical cards) ---------------- */
+  /* ---------------- SERVICES ---------------- */
   .service-row{
     display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:32px;
     padding:36px 0; border-top:1px solid var(--line);
@@ -110,8 +107,7 @@
   .service-row:hover{ background:rgba(47,143,114,0.05); }
   .service-icon{
     width:64px; height:64px; border-radius:18px; flex:none;
-    display:flex; align-items:center; justify-content:center;
-    color:var(--white);
+    display:flex; align-items:center; justify-content:center; color:var(--white);
   }
   .service-row:nth-child(odd) .service-icon{ background:var(--primary); }
   .service-row:nth-child(even) .service-icon{ background:var(--mint); }
@@ -122,11 +118,7 @@
     font-size:12.5px; font-weight:700; padding:6px 14px; border-radius:20px;
     background:var(--gold); color:var(--primary-2); white-space:nowrap;
   }
-  .service-link{
-    display:flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--primary);
-  }
-  .service-link svg{ transition:transform .18s ease; }
-  .service-row:hover .service-link svg{ transform:translateX(-4px); }
+  .service-link{ display:flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:var(--primary); }
 
   /* ---------------- WHY-US GRID ---------------- */
   .why-section{ background:var(--white); }
@@ -167,16 +159,23 @@
   .step-panel{ display:none; }
   .step-panel.active{ display:block; }
   .step-panel h4{ font-family:'Cairo',sans-serif; font-size:19px; color:var(--primary); margin-bottom:14px; }
-  .fake-field{
-    height:48px; border:1.5px solid var(--line); border-radius:10px; background:var(--bg);
-    display:flex; align-items:center; padding:0 16px; color:var(--muted); font-size:13.5px; margin-bottom:14px;
+  
+  /* Form Field Styles */
+  .form-control{
+    width:100%; height:48px; border:1.5px solid var(--line); border-radius:10px; background:var(--bg);
+    padding:0 16px; color:var(--ink); font-size:14px; font-family:'Tajawal', sans-serif; margin-bottom:14px;
+    transition:border-color 0.2s ease;
   }
-  .type-choice{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .form-control:focus{ outline:none; border-color:var(--mint); background:var(--white); }
+  
+  .type-choice{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
   .type-choice .opt{
     border:1.5px solid var(--line); border-radius:12px; padding:16px 10px; text-align:center; font-size:13.5px; font-weight:700; color:var(--ink);
     transition:all .15s ease; cursor:pointer;
   }
   .type-choice .opt.picked{ border-color:var(--mint); background:rgba(47,143,114,.08); color:var(--primary); }
+
+  .step-actions{ display:flex; justify-content:space-between; margin-top:20px; }
 
   /* ---------------- FOOTER ---------------- */
   footer{ background:var(--primary-2); color:var(--white); padding:64px 0 28px; }
@@ -190,7 +189,6 @@
   footer a:hover{ color:var(--gold); }
   .footer-bottom{ border-top:1px solid rgba(255,255,255,.12); padding-top:22px; text-align:center; font-size:12.5px; color:#93A9A2; }
 
-  /* ---------------- RESPONSIVE ---------------- */
   @media (max-width:880px){
     .nav-links{ display:none; }
     .hero-grid{ grid-template-columns:1fr; }
@@ -202,11 +200,6 @@
     .type-choice{ grid-template-columns:1fr; }
     .stepper span.t{ display:none; }
   }
-
-  @media (prefers-reduced-motion:no-preference){
-    .reveal{ opacity:0; transform:translateY(16px); animation:up .7s ease forwards; }
-  }
-  @keyframes up{ to{ opacity:1; transform:none; } }
 </style>
 </head>
 <body>
@@ -228,7 +221,7 @@
       <li><a href="#footer">تواصل معنا</a></li>
     </ul>
     <div class="nav-cta">
-      <button class="btn btn-primary">انضم إلينا</button>
+      <a href="#register" class="btn btn-primary">انضم إلينا</a>
     </div>
   </nav>
 </header>
@@ -239,7 +232,7 @@
       <h1>من التدريب الجامعي<br>إلى الوظيفة الحقيقية</h1>
       <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي بمنظومة واحدة.</p>
       <div class="hero-actions">
-        <button class="btn btn-primary">سجل الآن</button>
+        <a href="#register" class="btn btn-primary">سجل الآن</a>
         <a href="#services" class="btn btn-outline">تعرف على الخدمات</a>
       </div>
     </div>
@@ -307,4 +300,247 @@
 
       <div class="why-card">
         <div class="why-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg> </div> <h3>متابعة وتقييم يوثّق تقدمك أول بأول</h3> <p>الشركات بتقدر تراقب أداء المتدرب بمهام واضحة واختبارات دورية، والطالب بيشوف تقدمه بنفس اللحظة بدل ما يتفاجئ بتقييم آخر السنة.</p> </div> <div class="why-card"> <div class="why-icon"> <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="#fff" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg> </div> <h3>وقتك إلك — جلسات إرشاد حسب جدولك</h3> <p>ما في التزام بمواعيد ثابتة تصادم محاضراتك. تقدر تحجز جلسة الإرشاد بالوقت يلي يناسبك، وتشتغل على مشروعك براحتك.</p> </div> <div class="why-card"> <div class="why-icon"> <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 21V9l9-6 9 6v12" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke="#fff" stroke-width="1.8"/></svg> </div> <h3>للشركات: منظومة واحدة بدل ملفات متفرقة</h3> <p>نشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء — كله بمكان واحد، بدون إيميلات وملفات إكسل مبعثرة.</p> </div> </div> </div> </section> <section class="section" id="services" style="background:var(--white);"> <div class="wrap"> <div class="section-head"> <h2>خدمات المنصة الرئيسية</h2> <p>اضغط على أي خدمة للتسجيل والاشتراك المباشر بها.</p> </div> <div class="service-row"> <div class="service-icon"> <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 21V9l9-6 9 6v12" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke="#fff" stroke-width="1.8"/></svg> </div> <div class="service-body"> <h3>إدارة التدريب الميداني والتأهيل</h3> <p>منظومة موحدة للشركات لنشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء.</p> </div> <div class="service-meta"> <span class="badge">للشركات</span> <a class="service-link" href="#">التسجيل كممثل شركة <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a> </div> </div> <div class="service-row"> <div class="service-icon"> <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="#fff" stroke-width="1.8"/><path d="M4 20c1.8-4.5 5-6.5 8-6.5s6.2 2 8 6.5" stroke="#fff" stroke-width="1.8"/></svg> </div> <div class="service-body"> <h3>إرشاد مشروع التخرج (بالساعة)</h3> <p>جلسات إرشادية وتوجيهية مع خبراء لمساعدة الطالب على بناء مشروعه بنفسه وضمان النزاهة الأكاديمية.</p> </div> <div class="service-meta"> <span class="badge">بالساعة</span> <a class="service-link" href="#register">طلب الخدمة كطالب <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a> </div> </div> <div class="service-row"> <div class="service-icon"> <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" stroke="#fff" stroke-width="1.8"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" stroke="#fff" stroke-width="1.8"/></svg> </div> <div class="service-body"> <h3>برنامج التمديد المهني</h3> <p>ربط الطلاب المتميزين بشركات لتمديد تدريبهم 3 أشهر إضافية لزيادة فرص التوظيف وتقليل مخاطر التوظيف الجديد.</p> </div> <div class="service-meta"> <span class="badge">3 أشهر</span> <a class="service-link" href="#register">الانضمام كمرشد/مهندس <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a> </div> </div> </div> </section> <section class="section" id="register"> <div class="wrap"> <div class="section-head"> <h2>استمارة التسجيل والاستبيان</h2> <p>يرجى تزويدنا بالمعلومات الدقيقة لتقديم أفضل خدمة — العملية مقسّمة الآن على أربع خطوات بسيطة.</p> </div> <div class="register-panel"> <div class="stepper"> <button class="step active" data-step="1"><span class="num">١</span><span class="t">نوع الحساب</span></button> <button class="step" data-step="2"><span class="num">٢</span><span class="t">البيانات الأساسية</span></button> <button class="step" data-step="3"><span class="num">٣</span><span class="t">تفاصيل إضافية</span></button> <button class="step" data-step="4"><span class="num">٤</span><span class="t">تأكيد وإرسال</span></button> </div> <div class="step-panels"> <div class="step-panel active" data-panel="1"> <h4>ما هو نوع حسابك؟</h4> <div class="type-choice"> <div class="opt picked">طالب</div> <div class="opt">شركة</div> <div class="opt">مرشد / مهندس</div> </div> </div> <div class="step-panel" data-panel="2"> <h4>البيانات الأساسية</h4> <div class="fake-field">الاسم الكامل *</div> <div class="fake-field">البريد الإلكتروني الرسمي</div> <div class="fake-field">رقم الهاتف (مثال: 0791234567)</div> </div> <div class="step-panel" data-panel="3"> <h4>تفاصيل إضافية</h4> <div class="fake-field">مكان الإقامة (المدينة)</div> <div class="fake-field">التخصص / سنة التخرج المتوقعة</div> </div> <div class="step-panel" data-panel="4"> <h4>مراجعة سريعة قبل الإرسال</h4> <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">تأكد أن كل البيانات صحيحة، ثم اضغط الزر أدناه لإرسال رمز التفعيل إلى بريدك الإلكتروني.</p> <button class="btn btn-primary" style="width:100%;">إرسال رمز التفعيل</button> </div> </div> </div> </div> </section> <footer id="footer"> <div class="wrap"> <div class="footer-grid"> <div> <span class="brand-text">PATH <span>ENGINEERING</span></span> <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي.</p> </div> <div> <h5>روابط سريعة</h5> <ul> <li><a href="#hero">الرئيسية</a></li> <li><a href="#services">الخدمات</a></li> <li><a href="#register">التسجيل</a></li> </ul> </div> <div> <h5>تواصل معنا</h5> <ul> <li><a href="mailto:info@pathengineering.com">info@pathengineering.com</a></li> <li><a href="#">فريق الدعم والمساندة</a></li> </ul> </div> </div> <div class="footer-bottom">© 2026 Path Engineering — جميع الحقوق محفوظة</div> </div> </footer> <script> // sticky header shadow/background on scroll const header = document.getElementById('siteHeader'); window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 8); }); // registration stepper interactivity const steps = document.querySelectorAll('.step'); const panels = document.querySelectorAll('.step-panel'); steps.forEach(btn => { btn.addEventListener('click', () => { steps.forEach(b => b.classList.remove('active')); panels.forEach(p => p.classList.remove('active')); btn.classList.add('active'); document.querySelector('.step-panel[data-panel="' + btn.dataset.step + '"]').classList.add('active'); }); }); // account type picker (visual only) document.querySelectorAll('.type-choice .opt').forEach(opt => { opt.addEventListener('click', () => { opt.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('picked')); opt.classList.add('picked'); }); }); </script> </body> </html> 
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <h3>متابعة وتقييم يوثّق تقدمك أول بأول</h3>
+        <p>الشركات بتقدر تراقب أداء المتدرب بمهام واضحة واختبارات دورية، والطالب بيشوف تقدمه بنفس اللحظة بدل ما يتفاجئ بتقييم آخر السنة.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="#fff" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <h3>وقتك إلك — جلسات إرشاد حسب جدولك</h3>
+        <p>ما في التزام بمواعيد ثابتة تصادم محاضراتك. تقدر تحجز جلسة الإرشاد بالوقت يلي يناسبك، وتشتغل على مشروعك براحتك.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 21V9l9-6 9 6v12" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke="#fff" stroke-width="1.8"/></svg>
+        </div>
+        <h3>للشركات: منظومة واحدة بدل ملفات متفرقة</h3>
+        <p>نشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء — كله بمكان واحد، بدون إيميلات وملفات إكسل مبعثرة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services" style="background:var(--white);">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>خدمات المنصة الرئيسية</h2>
+      <p>اضغط على أي خدمة للتسجيل والاشتراك المباشر بها.</p>
+    </div>
+    <div class="service-row">
+      <div class="service-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 21V9l9-6 9 6v12" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21v-6h6v6" stroke="#fff" stroke-width="1.8"/></svg>
+      </div>
+      <div class="service-body">
+        <h3>إدارة التدريب الميداني والتأهيل</h3>
+        <p>منظومة موحدة للشركات لنشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء.</p>
+      </div>
+      <div class="service-meta">
+        <span class="badge">للشركات</span>
+        <a class="service-link" href="#register">التسجيل كممثل شركة <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+
+    <div class="service-row">
+      <div class="service-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="#fff" stroke-width="1.8"/><path d="M4 20c1.8-4.5 5-6.5 8-6.5s6.2 2 8 6.5" stroke="#fff" stroke-width="1.8"/></svg>
+      </div>
+      <div class="service-body">
+        <h3>إرشاد مشروع التخرج (بالساعة)</h3>
+        <p>جلسات إرشادية وتوجيهية مع خبراء لمساعدة الطالب على بناء مشروعه بنفسه وضمان النزاهة الأكاديمية.</p>
+      </div>
+      <div class="service-meta">
+        <span class="badge">بالساعة</span>
+        <a class="service-link" href="#register">طلب الخدمة كطالب <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+
+    <div class="service-row">
+      <div class="service-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" stroke="#fff" stroke-width="1.8"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" stroke="#fff" stroke-width="1.8"/></svg>
+      </div>
+      <div class="service-body">
+        <h3>برنامج التمديد المهني</h3>
+        <p>ربط الطلاب المتميزين بشركات لتمديد تدريبهم 3 أشهر إضافية لزيادة فرص التوظيف وتقليل مخاطر التوظيف الجديد.</p>
+      </div>
+      <div class="service-meta">
+        <span class="badge">3 أشهر</span>
+        <a class="service-link" href="#register">الانضمام كمرشد/مهندس <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="register">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>استمارة التسجيل والاستبيان</h2>
+      <p>يرجى تزويدنا بالمعلومات الدقيقة لتقديم أفضل خدمة — العملية مقسّمة الآن على أربع خطوات بسيطة.</p>
+    </div>
+    
+    <div class="register-panel">
+      <!-- Stepper Header -->
+      <div class="stepper">
+        <button type="button" class="step active" data-step="1"><span class="num">١</span><span class="t">نوع الحساب</span></button>
+        <button type="button" class="step" data-step="2"><span class="num">٢</span><span class="t">البيانات الأساسية</span></button>
+        <button type="button" class="step" data-step="3"><span class="num">٣</span><span class="t">تفاصيل إضافية</span></button>
+        <button type="button" class="step" data-step="4"><span class="num">٤</span><span class="t">تأكيد وإرسال</span></button>
+      </div>
+
+      <!-- Real Form Structure -->
+      <form id="registrationForm">
+        <input type="hidden" name="account_type" id="accountTypeInput" value="طالب">
+        
+        <div class="step-panels">
+          <!-- Step 1 -->
+          <div class="step-panel active" data-panel="1">
+            <h4>ما هو نوع حسابك؟</h4>
+            <div class="type-choice">
+              <div class="opt picked" data-value="طالب">طالب</div>
+              <div class="opt" data-value="شركة">شركة</div>
+              <div class="opt" data-value="مرشد / مهندس">مرشد / مهندس</div>
+            </div>
+            <div class="step-actions">
+              <div></div>
+              <button type="button" class="btn btn-primary next-btn">التالي</button>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-panel" data-panel="2">
+            <h4>البيانات الأساسية</h4>
+            <input type="text" name="full_name" class="form-control" placeholder="الاسم الكامل *" required />
+            <input type="email" name="email" class="form-control" placeholder="البريد الإلكتروني الرسمي *" required />
+            <input type="tel" name="phone" class="form-control" placeholder="رقم الهاتف (مثال: 0791234567)" required />
+            <div class="step-actions">
+              <button type="button" class="btn btn-outline prev-btn">السابق</button>
+              <button type="button" class="btn btn-primary next-btn">التالي</button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-panel" data-panel="3">
+            <h4>تفاصيل إضافية</h4>
+            <input type="text" name="city" class="form-control" placeholder="مكان الإقامة (المدينة)" />
+            <input type="text" name="major" class="form-control" placeholder="التخصص / سنة التخرج المتوقعة" />
+            <div class="step-actions">
+              <button type="button" class="btn btn-outline prev-btn">السابق</button>
+              <button type="button" class="btn btn-primary next-btn">التالي</button>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="step-panel" data-panel="4">
+            <h4>مراجعة سريعة قبل الإرسال</h4>
+            <p style="color:var(--muted); font-size:14px; margin-bottom:18px;">تأكد أن كل البيانات صحيحة، ثم اضغط الزر أدناه للإرسال.</p>
+            <div class="step-actions">
+              <button type="button" class="btn btn-outline prev-btn">السابق</button>
+              <button type="submit" class="btn btn-primary" style="flex:1; margin-right:10px;">إرسال رمز التفعيل</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</section>
+
+<footer id="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <span class="brand-text">PATH <span>ENGINEERING</span></span>
+        <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي.</p>
+      </div>
+      <div>
+        <h5>روابط سريعة</h5>
+        <ul>
+          <li><a href="#hero">الرئيسية</a></li>
+          <li><a href="#services">الخدمات</a></li>
+          <li><a href="#register">التسجيل</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>تواصل معنا</h5>
+        <ul>
+          <li><a href="mailto:info@pathengineering.com">info@pathengineering.com</a></li>
+          <li><a href="#">فريق الدعم والمساندة</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Path Engineering — جميع الحقوق محفوظة</div>
+  </div>
+</footer>
+
+<script>
+  // Sticky Header
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 8);
+  });
+
+  // Navigation Stepper Functionality
+  const steps = document.querySelectorAll('.step');
+  const panels = document.querySelectorAll('.step-panel');
+
+  function goToStep(stepNum) {
+    steps.forEach(b => b.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    
+    document.querySelector(`.step[data-step="${stepNum}"]`).classList.add('active');
+    document.querySelector(`.step-panel[data-panel="${stepNum}"]`).classList.add('active');
+  }
+
+  steps.forEach(btn => {
+    btn.addEventListener('click', () => {
+      goToStep(btn.dataset.step);
+    });
+  });
+
+  document.querySelectorAll('.next-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const currentPanel = e.target.closest('.step-panel');
+      const currentStep = parseInt(currentPanel.dataset.panel);
+      if (currentStep < 4) goToStep(currentStep + 1);
+    });
+  });
+
+  document.querySelectorAll('.prev-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const currentPanel = e.target.closest('.step-panel');
+      const currentStep = parseInt(currentPanel.dataset.panel);
+      if (currentStep > 1) goToStep(currentStep - 1);
+    });
+  });
+
+  // Account Type Picker
+  const accountTypeInput = document.getElementById('accountTypeInput');
+  document.querySelectorAll('.type-choice .opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      opt.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('picked'));
+      opt.classList.add('picked');
+      accountTypeInput.value = opt.dataset.value;
+    });
+  });
+
+  // Form Submission Handling (Data Extraction)
+  const form = document.getElementById('registrationForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    console.log('تم جمع البيانات بنجاح:', data);
+    alert('تم استلام البيانات بنجاح! يمكن الآن ربطها مع قاعدة البيانات.');
+    
+    // هنا يمكنك إضافة كود Supabase للإرسال:
+    // const { data: result, error } = await supabase.from('users').insert([data]);
+  });
+</script>
+</body>
+</html>
