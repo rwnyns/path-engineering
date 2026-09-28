@@ -3,63 +3,206 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل الطلاب</title>
+  <title>منصة تسجيل الطلاب - Path Engineering</title>
+  
+  <!-- خط Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  
   <!-- مكتبة Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 480px;
+      padding: 32px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #38bdf8;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #e2e8f0;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      background-color: #0f172a;
+      color: #ffffff;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-group input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background-color: #0284c7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+      background-color: #0369a1;
+    }
+
+    .btn-submit:disabled {
+      background-color: #475569;
+      cursor: not-allowed;
+    }
+
+    #statusMessage {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+
+    #statusMessage.success {
+      display: block;
+      background-color: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    #statusMessage.error {
+      display: block;
+      background-color: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+  </style>
 </head>
 <body>
 
-  <h2>نموذج التسجيل</h2>
-  <form id="registrationForm">
-    <label for="name">الاسم كامل:</label><br>
-    <input type="text" id="name" required><br><br>
+  <div class="container">
+    <div class="header">
+      <h1>Path Engineering</h1>
+      <p>يرجى تعبئة البيانات التالية لإتمام التسجيل</p>
+    </div>
 
-    <label for="email">البريد الإلكتروني:</label><br>
-    <input type="email" id="email" required><br><br>
+    <form id="registrationForm">
+      <div class="form-group">
+        <label for="fullName">الاسم الكامل:</label>
+        <input type="text" id="fullName" placeholder="أدخل اسمك الكامل" required>
+      </div>
 
-    <label for="phone">رقم الهاتف:</label><br>
-    <input type="tel" id="phone" required><br><br>
+      <div class="form-group">
+        <label for="email">البريد الإلكتروني:</label>
+        <input type="email" id="email" placeholder="example@domain.com" required>
+      </div>
 
-    <button type="submit">إرسال التسجيل</button>
-  </form>
+      <button type="submit" class="btn-submit" id="submitBtn">إرسال التسجيل</button>
+    </form>
 
-  <p id="statusMessage"></p>
+    <div id="statusMessage"></div>
+  </div>
 
   <script>
-    // 1. إعداد قيم الاتصال بـ Supabase الخاصة بمشروعك
+    // 1. إعدادات الاتصال بـ Supabase
     const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nZXN2ZGJzZ3B0ZmlmbGxkdXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNDM1MjgsImV4cCI6MjEwMzcxOTUyOH0.iawdyfh61v4mW1ZDazorBTYbBmVjeIsgizv2jsfuE4Q';
 
-    // 2. إنشاء عميل Supabase
+    // 2. إنشاء عميل الاتصال
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // 3. معالجة إرسال النموذج
+    // 3. التحكم بالنموذج وحفظ البيانات
     const form = document.getElementById('registrationForm');
+    const submitBtn = document.getElementById('submitBtn');
     const statusMessage = document.getElementById('statusMessage');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      statusMessage.textContent = 'جاري إرسال البيانات...';
 
-      const full_name = document.getElementById('name').value;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'جاري الإرسال...';
+      statusMessage.style.display = 'none';
+
+      const fullName = document.getElementById('fullName').value;
       const email = document.getElementById('email').value;
-      const phone = document.getElementById('phone').value;
 
-      // إرسال البيانات إلى جدول registrations
-      const { data, error } = await supabaseClient
-        .from('registrations')
-        .insert([
-          { name: name, email: email, phone: phone }
-        ]);
+      try {
+        // الإرسال مطبق تماماً مع أسماء أعمدة جدولك: full_name و email
+        const { data, error } = await supabaseClient
+          .from('registrations')
+          .insert([
+            { full_name: fullName, email: email }
+          ]);
 
-      if (error) {
-        console.error('Error inserting data:', error);
-        statusMessage.textContent = 'حدث خطأ أثناء التسجيل: ' + error.message;
-        statusMessage.style.color = 'red';
-      } else {
-        statusMessage.textContent = 'تم التسجيل بنجاح!';
-        statusMessage.style.color = 'green';
+        if (error) throw error;
+
+        statusMessage.className = 'success';
+        statusMessage.textContent = 'تم التسجيل بنجاح والحفظ في القاعدة!';
         form.reset();
+
+      } catch (err) {
+        console.error('Supabase Error:', err);
+        statusMessage.className = 'error';
+        statusMessage.textContent = 'حدث خطأ: ' + (err.message || 'تعذر الإرسال، تأكد من صلاحيات RLS');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'إرسال التسجيل';
       }
     });
   </script>
