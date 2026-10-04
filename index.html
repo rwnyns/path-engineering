@@ -185,6 +185,72 @@
         footer a:hover { color: var(--gold); }
         .footer-bottom { border-top: 1px solid rgba(255,255,255,.12); padding-top: 22px; text-align: center; font-size: 12.5px; color: #93A9A2; }
 
+        /* ---------------- CHATBOT STYLES ---------------- */
+        .chat-toggle {
+            position: fixed; bottom: 24px; left: 24px;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: var(--mint); color: var(--white);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; cursor: pointer; z-index: 999;
+            box-shadow: 0 10px 25px rgba(47,143,114,0.4);
+            border: none; transition: transform .2s ease, background .2s ease;
+        }
+        .chat-toggle:hover { transform: scale(1.08); background: var(--mint-hover); }
+
+        .chat-widget {
+            position: fixed; bottom: 96px; left: 24px;
+            width: 360px; max-width: calc(100vw - 48px); height: 480px;
+            background: var(--white); border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border: 1px solid var(--line);
+            display: none; flex-direction: column; z-index: 1000;
+            overflow: hidden; animation: popIn .25s ease forwards;
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .chat-header {
+            background: var(--primary); color: var(--white);
+            padding: 16px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .chat-header-title { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+        .chat-close { background: none; border: none; color: var(--white); cursor: pointer; font-size: 18px; opacity: 0.8; }
+        .chat-close:hover { opacity: 1; }
+
+        .chat-messages {
+            flex: 1; padding: 16px; overflow-y: auto; display: flex;
+            flex-direction: column; gap: 12px; background: var(--bg);
+        }
+        .chat-msg {
+            max-width: 82%; padding: 10px 14px; border-radius: 14px;
+            font-size: 13.5px; line-height: 1.5; word-break: break-word;
+        }
+        .chat-msg.bot {
+            align-self: flex-start; background: var(--white); color: var(--ink);
+            border: 1px solid var(--line); border-bottom-right-radius: 4px;
+        }
+        .chat-msg.user {
+            align-self: flex-end; background: var(--mint); color: var(--white);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-area {
+            padding: 12px; background: var(--white); border-top: 1px solid var(--line);
+            display: flex; gap: 8px;
+        }
+        .chat-input {
+            flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line);
+            font-family: 'Tajawal', sans-serif; font-size: 14px; outline: none;
+        }
+        .chat-input:focus { border-color: var(--mint); }
+        .chat-send {
+            background: var(--mint); color: var(--white); border: none;
+            padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 700;
+        }
+        .chat-send:hover { background: var(--mint-hover); }
+
         /* ---------------- RESPONSIVE ---------------- */
         @media (max-width: 880px) {
             .nav-links { display: none; }
@@ -291,7 +357,7 @@
                 <div class="why-card">
                     <div class="why-icon"><i class="fa-solid fa-chart-line" style="color:#fff;"></i></div>
                     <h3>متابعة وتقييم يوثّق تقدمك أول بأول</h3>
-                    <p>الشركات بتقدر تراقب أداء المتدرب بمهام واضحة واختبارات دورية، والطالب بيشوف تقدمه بنفس اللحظة.</p>
+                    <p>الشركات بتقدر تراقب أداء المتدرب بمهام واضحة وااختبارات دورية، والطالب بيشوف تقدمه بنفس اللحظة.</p>
                 </div>
 
                 <div class="why-card">
@@ -355,7 +421,7 @@
         </div>
     </section>
 
-    <!-- REGISTRATION SECTION WITH SUPABASE INTERACTION -->
+    <!-- REGISTRATION SECTION -->
     <section class="section" id="register">
         <div class="wrap">
             <div class="register-panel">
@@ -417,5 +483,86 @@
         </div>
     </footer>
 
+    <!-- CHATBOT WIDGET UI -->
+    <button class="chat-toggle" id="chatToggleBtn" title="المساعد الذكي">
+        <i class="fa-solid fa-comments"></i>
+    </button>
+
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header">
+            <div class="chat-header-title">
+                <i class="fa-solid fa-robot"></i>
+                مساعد Path Engineering
+            </div>
+            <button class="chat-close" id="chatCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-msg bot">أهلاً بك! 👋 كيف أستطيع مساعدتك اليوم بخصوص منصة Path Engineering؟</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" class="chat-input" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+            <button class="chat-send" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- CHATBOT JAVASCRIPT LOGIC -->
+    <script>
+        // Toggle Chatbox
+        const chatToggleBtn = document.getElementById('chatToggleBtn');
+        const chatWidget = document.getElementById('chatWidget');
+        const chatCloseBtn = document.getElementById('chatCloseBtn');
+
+        chatToggleBtn.addEventListener('click', () => {
+            chatWidget.style.display = chatWidget.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        chatCloseBtn.addEventListener('click', () => {
+            chatWidget.style.display = 'none';
+        });
+
+        // Chat Logic & Auto Answers
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Add user message
+            appendMessage(text, 'user');
+            input.value = '';
+
+            // Generate reply after brief delay
+            setTimeout(() => {
+                const reply = getBotReply(text);
+                appendMessage(reply, 'bot');
+            }, 600);
+        }
+
+        function appendMessage(text, side) {
+            const container = document.getElementById('chatMessages');
+            const msg = document.createElement('div');
+            msg.className = `chat-msg ${side}`;
+            msg.textContent = text;
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function getBotReply(query) {
+            const q = query.toLowerCase();
+            
+            if (q.includes('سجل') || q.includes('تسجيل') || q.includes('كيف اشترك')) {
+                return 'يمكنك التسجيل بسهولة من خلال استمارة الانضمام المتاحة في أسفل الصفحة. اختر فئتك (طالب، مرشد، أو شركة) وعبّئ بياناتك!';
+            } else if (q.includes('مشروع') || q.includes('تخرج') || q.includes('ساعة') || q.includes('ارشاد')) {
+                return 'خدمة إرشاد مشروع التخرج تتيح لك حجز جلسات بالساعة مع مهندسين خبراء لمساعدتك في بناء مشروعك بنفسك وبصمتك الخاصة.';
+            } else if (q.includes('شركة') || q.includes('شركات') || q.includes('تدريب ميداني')) {
+                return 'تتيح المنصة للشركات نشر فرص التدريب الميداني، متابعة مهام المتدربين، إجراء الاختبارات الدوريّة، وتقييم الأداء بمنظومة واحدة.';
+            } else if (q.includes('تمديد') || q.includes('3 أشهر') || q.includes('وظيفة')) {
+                return 'برنامج التمديد المهني يربط الطلاب المتميزين بشركات لتمديد تدريبهم 3 أشهر إضافية لزيادة فرص التوظيف الفعلي.';
+            } else if (q.includes('مرحبا') || q.includes('هلا') || q.includes('السلام')) {
+                return 'أهلاً وسهلاً بك! كيف يمكنني مساعدتك في رحلتك مع Path Engineering؟';
+            } else {
+                return 'شكراً لتواصلك! لمزيد من التفاصيل الدقيقة، يمكنك تعبئة استمارة التسجيل في الصفحة وسيتم التواصل معك مباشرة من قبل فريقنا.';
+            }
+        }
+    </script>
 </body>
 </html>
