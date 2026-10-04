@@ -508,12 +508,11 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // ---------------- SUPABASE INTEGRATION ----------------
-        // استبدل المفاتيح أدناه بمفاتيح مشروعك الخاصة في Supabase
-        const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supbase.co';
+        const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_8SQ-JfcbI2uGBstuTps0ow_hNbaNym8';
         
         let _supabase = null;
-        if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && typeof supabase !== 'undefined') {
+        if (typeof supabase !== 'undefined') {
             _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         }
 
@@ -567,6 +566,8 @@
                         .insert([{ full_name: fullName, email: email, role: role }]);
 
                     if (error) throw error;
+                } else {
+                    throw new Error('Supabase client is not initialized');
                 }
                 
                 // في حال النجاح
