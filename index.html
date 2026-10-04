@@ -505,9 +505,88 @@
         </div>
     </div>
 
-    <!-- CHATBOT JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Toggle Chatbox
+        // ---------------- SUPABASE INTEGRATION ----------------
+        // استبدل المفاتيح أدناه بمفاتيح مشروعك الخاصة في Supabase
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        
+        let _supabase = null;
+        if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && typeof supabase !== 'undefined') {
+            _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
+        // ---------------- ROLE SELECTOR INTERACTION ----------------
+        const roleOpts = document.querySelectorAll('.role-opt');
+        const roleInput = document.getElementById('role');
+
+        roleOpts.forEach(opt => {
+            opt.addEventListener('click', () => {
+                roleOpts.forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                roleInput.value = opt.getAttribute('data-value');
+            });
+        });
+
+        // ---------------- SERVICE ROWS CLICK ACTION ----------------
+        document.getElementById('row-company').addEventListener('click', () => selectRoleAndScroll('company'));
+        document.getElementById('row-student').addEventListener('click', () => selectRoleAndScroll('student'));
+        document.getElementById('row-mentor').addEventListener('click', () => selectRoleAndScroll('mentor'));
+
+        function selectRoleAndScroll(roleValue) {
+            roleOpts.forEach(o => {
+                if (o.getAttribute('data-value') === roleValue) {
+                    o.click();
+                }
+            });
+            document.getElementById('register').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ---------------- FORM SUBMISSION LOGIC ----------------
+        const registrationForm = document.getElementById('registrationForm');
+        const responseMessage = document.getElementById('responseMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        registrationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const role = roleInput.value;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري إرسال البيانات...';
+            responseMessage.textContent = '';
+
+            try {
+                if (_supabase) {
+                    // إرسال البيانات إلى جدول registrations في Supabase
+                    const { data, error } = await _supabase
+                        .from('registrations')
+                        .insert([{ full_name: fullName, email: email, role: role }]);
+
+                    if (error) throw error;
+                }
+                
+                // في حال النجاح
+                responseMessage.style.color = '#2F8F72';
+                responseMessage.textContent = 'تم إرسال بياناتك بنجاح! سنتواصل معك قريباً.';
+                registrationForm.reset();
+                // إعادة تعيين الفئة الافتراضية
+                roleOpts[0].click();
+
+            } catch (err) {
+                console.error(err);
+                responseMessage.style.color = '#d93838';
+                responseMessage.textContent = 'حدث خطأ أثناء الإرسال. يرجى المحاولة لاحقاً.';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'إرسال البيانات';
+            }
+        });
+
+        // ---------------- CHATBOT LOGIC ----------------
         const chatToggleBtn = document.getElementById('chatToggleBtn');
         const chatWidget = document.getElementById('chatWidget');
         const chatCloseBtn = document.getElementById('chatCloseBtn');
@@ -520,21 +599,18 @@
             chatWidget.style.display = 'none';
         });
 
-        // Chat Logic & Auto Answers
         function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
             if (!text) return;
 
-            // Add user message
             appendMessage(text, 'user');
             input.value = '';
 
-            // Generate reply after brief delay
             setTimeout(() => {
                 const reply = getBotReply(text);
                 appendMessage(reply, 'bot');
-            }, 600);
+            }, 500);
         }
 
         function appendMessage(text, side) {
@@ -560,7 +636,7 @@
             } else if (q.includes('مرحبا') || q.includes('هلا') || q.includes('السلام')) {
                 return 'أهلاً وسهلاً بك! كيف يمكنني مساعدتك في رحلتك مع Path Engineering؟';
             } else {
-                return 'شكراً لتواصلك! لمزيد من التفاصيل الدقيقة، يمكنك تعبئة استمارة التسجيل في الصفحة وسيتم التواصل معك مباشرة من قبل فريقنا.';
+                return 'شكراً لتواصلك! يمكنك ترك استفسارك كاملاً عبر خيار "التسجيل" وسنقوم بالرد عليك في أسرع وقت ممكن.';
             }
         }
     </script>
