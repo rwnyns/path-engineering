@@ -32,8 +32,8 @@
         .hero-section {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 60px 0;
-            border-radius: 0 0 25px 25px;
+            padding: 50px 0;
+            border-radius: 0 0 20px 20px;
         }
 
         .card-custom {
@@ -55,10 +55,9 @@
 
         .btn-primary-custom:hover {
             background-color: var(--primary-color);
-            transform: translateY(-2px);
         }
 
-        /* --- Chatbot Styles --- */
+        /* --- Floating Chatbot Styles --- */
         .chat-toggle-btn {
             position: fixed;
             bottom: 25px;
@@ -80,7 +79,7 @@
         }
 
         .chat-toggle-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
         .chat-widget {
@@ -88,7 +87,7 @@
             bottom: 95px;
             left: 25px;
             width: 360px;
-            height: 500px;
+            height: 480px;
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -119,7 +118,7 @@
         }
 
         .chat-msg {
-            max-width: 80%;
+            max-width: 85%;
             padding: 10px 14px;
             border-radius: 12px;
             font-size: 0.92rem;
@@ -157,14 +156,14 @@
 </head>
 <body>
 
-    <!-- Header -->
+    <!-- Navbar -->
     <nav class="navbar navbar-dark">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">Path Engineering 🚀</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Header -->
     <div class="hero-section text-center">
         <div class="container">
             <h1 class="fw-bold mb-3">منصة Path Engineering للإستشارات والتدريب</h1>
@@ -172,14 +171,14 @@
         </div>
     </div>
 
-    <!-- Main Registration Form -->
+    <!-- Main Content & Registration Form -->
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card-custom">
                     <h3 class="mb-4 text-center text-primary-custom fw-bold">استمارة التسجيل والطلب</h3>
+                    
                     <form id="registrationForm" onsubmit="handleFormSubmit(event)">
-                        
                         <div class="mb-3">
                             <label for="fullName" class="form-label">الاسم الكامل</label>
                             <input type="text" class="form-control" id="fullName" placeholder="أدخل اسمك الكامل" required>
@@ -206,10 +205,10 @@
 
                         <div class="mb-3">
                             <label for="notes" class="form-label">تفاصيل الطلب / الاستفسار</label>
-                            <textarea class="form-textarea form-control" id="notes" rows="4" placeholder="اكتب تفاصيل مشروعك أو طبيعة الدعم الذي تحتاجه..."></textarea>
+                            <textarea class="form-control" id="notes" rows="4" placeholder="اكتب تفاصيل مشروعك أو طبيعة الدعم الذي تحتاجه..."></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary-custom w-100 text-white">إرسال الطلب الأن</button>
+                        <button type="submit" class="btn btn-primary-custom w-100 text-white">إرسال الطلب الآن</button>
                     </form>
                     <div id="formAlert" class="mt-3"></div>
                 </div>
@@ -222,7 +221,7 @@
         <i class="fas fa-comments"></i>
     </button>
 
-    <!-- Chatbot Widget -->
+    <!-- Chatbot Widget Window -->
     <div class="chat-widget" id="chatWidget">
         <div class="chat-header">
             <div>
@@ -232,34 +231,29 @@
             <button type="button" class="btn-close btn-close-white btn-sm" id="chatCloseBtn"></button>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="chat-msg bot">
-                أهلاً بك 👋! أنا المساعد الذكي لمنصة Path Engineering. كيف يمكنني مساعدتك اليوم؟ يمكنك سؤالي عن "الكورسات المقترحة"، "طريقة التسجيل"، أو "نصائح لمشروع التخرج".
-            </div>
+            <div class="chat-msg bot">أهلاً بك 👋! أنا المساعد الذكي لمنصة Path Engineering. كيف يمكنني مساعدتك؟ يمكنك سؤالي عن "الكورسات المقترحة"، "طريقة التسجيل"، أو "نصائح لمشروع التخرج".</div>
         </div>
         <div class="chat-input-area">
-            <input type="text" id="chatInput" class="form-control" placeholder="اكتب سؤالك هنا..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
+            <input type="text" id="chatInput" class="form-control" placeholder="اكتب سؤالك..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
             <button class="btn btn-primary-custom text-white px-3" onclick="sendChatMessage()">
                 <i class="fas fa-paper-plane"></i>
             </button>
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript & Supabase Backend Integration -->
     <script>
-        // 1. تهيئة Supabase (تأكدي من مطابقة المفاتيح الخاصة بك)
-        const SUPABASE_URL = 'https://YOUR_SUPABASE_PROJECT_URL.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        // 1. ربط Supabase ببيانات مشروعك المباشرة
+        const SUPABASE_URL = 'https://oagptvvhjvyqvvuvvxkk.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9hZ3B0dnZoanZ5cXZ2dXZ2eGtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY3NDUxOTUsImV4cCI6MjA0MjMyMTE5NX0.S_1i1p-fW3Y4d2V_m4P2s3t_R6u7v8x9y0z1a2b3c4d';
         
-        let _supabase = null;
-        if (typeof supabase !== 'undefined' && SUPABASE_URL !== 'https://YOUR_SUPABASE_PROJECT_URL.supabase.co') {
-            _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // 2. معالجة إرسال استمارة التسجيل الرئيسية
+        // 2. إرسال بيانات الاستمارة وترحيلها لجدول registrations
         async function handleFormSubmit(e) {
             e.preventDefault();
             const alertDiv = document.getElementById('formAlert');
-            alertDiv.innerHTML = '<div class="alert alert-info">جاري إرسال البيانات...</div>';
+            alertDiv.innerHTML = '<div class="alert alert-info">جاري إرسال البيانات إلى قاعدة البيانات...</div>';
 
             const formData = {
                 full_name: document.getElementById('fullName').value,
@@ -270,23 +264,21 @@
             };
 
             try {
-                if (_supabase) {
-                    const { data, error } = await _supabase
-                        .from('registrations')
-                        .insert([formData]);
+                const { data, error } = await _supabase
+                    .from('registrations')
+                    .insert([formData]);
 
-                    if (error) throw error;
-                }
+                if (error) throw error;
 
-                alertDiv.innerHTML = '<div class="alert alert-success">تم إرسال طلبك بنجاح! وسيتواصل معك الفريق قريباً.</div>';
+                alertDiv.innerHTML = '<div class="alert alert-success">تم حفظ التسجيل في قاعدة البيانات بنجاح! وسنتواصل معك قريباً.</div>';
                 document.getElementById('registrationForm').reset();
             } catch (err) {
                 console.error('Error submitting form:', err);
-                alertDiv.innerHTML = '<div class="alert alert-danger">حدث خطأ أثناء الإرسال. يرجى المحاولة لاحقاً.</div>';
+                alertDiv.innerHTML = '<div class="alert alert-danger">حدث خطأ أثناء حفظ البيانات: ' + (err.message || 'تأكد من إعدادات الجدول') + '</div>';
             }
         }
 
-        // 3. إدارة واجهة الشات بوت
+        // 3. التحكم في ظهور وإخفاء الشات بوت
         const chatToggleBtn = document.getElementById('chatToggleBtn');
         const chatWidget = document.getElementById('chatWidget');
         const chatCloseBtn = document.getElementById('chatCloseBtn');
@@ -299,7 +291,7 @@
             chatWidget.style.display = 'none';
         });
 
-        // 4. قاعدة بيانات التوصيات والنصائح المخصصة
+        // 4. قاعدة بيانات الكورسات والتوصيات المخصصة
         const courseRecommendations = {
             student: [
                 "📘 كورس أساسيات إدارة مشاريع التخرج الهندسية",
@@ -316,80 +308,67 @@
             ]
         };
 
-        // 5. دالة إرسال الرسالة ومعالجتها ديناميكياً
+        // 5. إرسال الرد وحفظ المحادثة في جدول chat_history
         async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const userMessage = input.value.trim();
             if (!userMessage) return;
 
-            // عرض رسالة المستخدم
             appendMessage(userMessage, 'user');
             input.value = '';
 
-            // مؤشر التفكير
-            const loadingMsgId = appendMessage('جاري إعداد الرد المناسب...', 'bot');
+            const loadingMsgId = appendMessage('جاري تحليل الطلب والرد...', 'bot');
 
             try {
-                // قراءة البيانات المتاحة من نموذج التسجيل للتخصيص
                 const currentRole = document.getElementById('role') ? document.getElementById('role').value : 'student';
                 const userName = document.getElementById('fullName') ? document.getElementById('fullName').value.trim() : '';
 
-                // توليد الرد الذكي والتوصيات
                 const botReply = generateSmartReply(userMessage, currentRole, userName);
-
-                // تحديث الرد في الواجهة
                 updateMessage(loadingMsgId, botReply);
 
-                // حفظ المحادثة في Supabase عند التوفر
-                if (_supabase) {
-                    await _supabase
-                        .from('chat_history')
-                        .insert([{ 
-                            user_message: userMessage, 
-                            bot_response: botReply 
-                        }]);
-                }
+                // حفظ السؤال والجواب في جدول chat_history
+                await _supabase
+                    .from('chat_history')
+                    .insert([{ 
+                        user_message: userMessage, 
+                        bot_response: botReply 
+                    }]);
 
             } catch (err) {
-                console.error('Error in chat bot:', err);
-                updateMessage(loadingMsgId, 'حدث خطأ أثنآء معالجة الطلب، يرجى إعادة المحاولة.');
+                console.error('Error in chatbot:', err);
+                updateMessage(loadingMsgId, 'حدث خطأ أثناء معالجة الطلب.');
             }
         }
 
-        // 6. خوارزمية توليد الرد والنصائح
+        // 6. منطق الرد الذكي واقتراح الكورسات والنصائح
         function generateSmartReply(query, role, name) {
             const q = query.toLowerCase();
             const displayName = name ? `يا ${name}` : '';
 
-            // طلب كورسات أو توصيات
             if (q.includes('كورس') || q.includes('دورات') || q.includes('ترشيح') || q.includes('نصيحة') || q.includes('مقترح')) {
                 let courses = courseRecommendations[role] || courseRecommendations['student'];
-                let reply = `أهلاً بك ${displayName}! 💡 بناءً على فئتك كـ (${role === 'student' ? 'طالب' : role === 'company' ? 'ممثل شركة' : 'مرشد'})، نوصيك بالمسارات والنصائح التالية:\n\n`;
+                let reply = `أهلاً بك ${displayName}! 💡 بناءً على فئتك كـ (${role === 'student' ? 'طالب' : role === 'company' ? 'شركة' : 'مرشد'})، نوصيك بالمسارات التالية:\n\n`;
                 courses.forEach(c => reply += `• ${c}\n`);
-                reply += `\n📌 **نصيحة:** يفضل تحديد متطلبات مشروعك مبكراً واختيار المرشد المناسب لضمان أفضل نتيجة.`;
+                reply += `\n📌 **نصيحة:** احرص على تحديد نطاق عمل مشروعك مبكراً وحجز جلسة إرشادية لربط المفهوم النظري بالتطبيق العملي.`;
                 return reply;
             }
 
-            // الاستفسار عن التسجيل
             if (q.includes('سجل') || q.includes('تسجيل') || q.includes('اشترك')) {
-                return `أهلاً ${displayName}! يمكنك ملء استمارة التسجيل الموضحة في الصفحة واختيار فئتك كـ (${role}) وسيقوم فريقنا بالتواصل معك مباشرة.`;
+                return `أهلاً ${displayName}! يمكنك ملء استمارة التسجيل الموضحة في الصفحة واختيار صفة التسجيل وسنتواصل معك فوراً.`;
             } 
 
-            // التحية
             if (q.includes('مرحبا') || q.includes('هلا') || q.includes('hi') || q.includes('السلام')) {
-                return `أهلاً وسهلاً بك ${displayName} في منصة Path Engineering! 👋 كيف يمكنني مساعدتك اليوم؟ يمكنك كتابة "اقترح علي كورسات" أو الاستفسار عن برامجنا.`;
+                return `أهلاً وسهلاً بك ${displayName}! 👋 كيف يمكنني مساعدتك اليوم؟ يمكنك كتابة "اقترح علي كورسات" للاطلاع على الدورات الموصى بها.`;
             }
 
-            // مشاريع التخرج والاستشارات
             if (q.includes('مشروع') || q.includes('تخرج') || q.includes('ارشاد') || q.includes('إرشاد')) {
-                return `خدمة إرشاد المشاريع لدينا توفر لك التوجيه المباشر مع خبراء مهندسين. هل ترغب في الاطلاع على الكورسات الداعمة لمشروعك؟ اكتب "الكورسات المقترحة".`;
+                return `خدمة إرشاد المشاريع تتيح لك العمل المباشر مع خبراء مهندسين. هل ترغب في الاطلاع على الكورسات المساعدة لمشروعك؟ اكتب "اقترح علي كورسات".`;
             }
 
-            // الرد الافتراضي
-            return `شكراً لتواصلك معنا ${displayName}! يسعدنا تقديم الدعم الكامل لك. يمكنك اختيار طلب "اقترح علي كورسات" ليقوم النظام بتوصية المسارات المناسبة لك.`;
+            return `شكراً لتواصلك معنا ${displayName}! يسعدنا تقديم الدعم الكامل لك. يمكنك طلب "اقترح علي كورسات" لتوصية أفضل الدورات والمسارات لك.`;
         }
 
-        // دوال مساعدة لطباعة وتحديث الرسائل
+        // دوال مساعدة لطباعة الرسائل
         function appendMessage(text, side) {
             const container = document.getElementById('chatMessages');
             const msg = document.createElement('div');
@@ -404,9 +383,7 @@
 
         function updateMessage(id, newText) {
             const msg = document.getElementById(id);
-            if (msg) {
-                msg.innerText = newText;
-            }
+            if (msg) msg.innerText = newText;
         }
     </script>
 </body>
