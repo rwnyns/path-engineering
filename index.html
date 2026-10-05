@@ -3,387 +3,644 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Path Engineering - تسجيل واستشارات</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
+    <title>Path Engineering — المنصة الهندسية المتكاملة</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Client -->
+    <!-- Supabase Client Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <style>
         :root {
-            --primary-color: #1a365d;
-            --secondary-color: #2b6cb0;
-            --accent-color: #319795;
-            --bg-light: #f7fafc;
+            --primary: #123B32;
+            --primary-2: #0D2C26;
+            --mint: #2F8F72;
+            --mint-hover: #247059;
+            --gold: #D99A3F;
+            --bg: #F7FAF9;
+            --ink: #16241F;
+            --muted: #5C6E68;
+            --line: #E1EAE6;
+            --white: #FFFFFF;
+            --radius-lg: 22px;
+            --radius-md: 14px;
+            --maxw: 1180px;
         }
 
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-light);
-            color: #2d3748;
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.7;
         }
 
-        .navbar {
-            background-color: var(--primary-color);
-        }
+        h1, h2, h3, h4 { font-family: 'Cairo', sans-serif; margin: 0; }
+        p { margin: 0; }
+        a { text-decoration: none; color: inherit; }
+        img, svg { display: block; }
+        :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+        .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
 
-        .hero-section {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 50px 0;
-            border-radius: 0 0 20px 20px;
+        /* ---------------- NAV ---------------- */
+        header {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(247,250,249,0.88);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid transparent;
+            transition: border-color .25s ease, background .25s ease;
         }
+        header.scrolled { border-color: var(--line); background: rgba(247,250,249,0.98); }
+        nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand-text { font-family: 'Cairo', sans-serif; font-weight: 800; font-size: 19px; color: var(--primary); }
+        .brand-text span { color: var(--mint); }
+        .nav-links { display: flex; gap: 34px; list-style: none; margin: 0; padding: 0; }
+        .nav-links a { font-size: 15px; font-weight: 500; color: var(--ink); position: relative; padding: 6px 2px; }
+        .nav-links a::after {
+            content: ""; position: absolute; right: 0; left: 0; bottom: -2px; height: 2px;
+            background: var(--mint); transform: scaleX(0); transform-origin: left; transition: transform .2s ease;
+        }
+        .nav-links a:hover::after { transform: scaleX(1); }
 
-        .card-custom {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            background: white;
-            padding: 30px;
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            font-family: 'Tajawal', sans-serif; font-weight: 700; font-size: 15px;
+            padding: 12px 26px; border-radius: 12px; cursor: pointer; border: none;
+            transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
         }
+        .btn-primary { background: var(--mint); color: var(--white); box-shadow: 0 10px 22px -10px rgba(47,143,114,.55); }
+        .btn-primary:hover { transform: translateY(-2px); background: var(--mint-hover); box-shadow: 0 14px 26px -10px rgba(47,143,114,.6); }
+        .btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: var(--white); }
+        .nav-cta { display: flex; align-items: center; gap: 16px; }
 
-        .btn-primary-custom {
-            background-color: var(--secondary-color);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+        /* ---------------- HERO ---------------- */
+        .hero { padding: 76px 0 60px; }
+        .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
+        .hero h1 { font-size: 44px; line-height: 1.28; font-weight: 800; color: var(--primary); margin-bottom: 20px; }
+        .hero p.lede { font-size: 17px; color: var(--muted); max-width: 46ch; margin-bottom: 32px; }
+        .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
 
-        .btn-primary-custom:hover {
-            background-color: var(--primary-color);
+        /* Path visual */
+        .path-node { display: flex; align-items: center; gap: 14px; }
+        .path-node .dot {
+            width: 46px; height: 46px; border-radius: 50%; flex: none;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--white); border: 2px solid var(--mint); color: var(--primary);
         }
+        .path-node.done .dot { background: var(--primary); border-color: var(--primary); color: var(--white); }
+        .path-node .label { font-weight: 700; font-size: 15px; color: var(--ink); }
+        .path-node .sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
 
-        /* --- Floating Chatbot Styles --- */
-        .chat-toggle-btn {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            cursor: pointer;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            transition: transform 0.3s ease;
-        }
+        /* ---------------- SECTION HEADS ---------------- */
+        .section { padding: 88px 0; }
+        .section-head { max-width: 640px; margin-bottom: 52px; }
+        .section-head h2 { font-size: 32px; color: var(--primary); font-weight: 800; margin-bottom: 12px; }
+        .section-head p { color: var(--muted); font-size: 16px; }
 
-        .chat-toggle-btn:hover {
-            transform: scale(1.08);
+        /* ---------------- WHY-US GRID ---------------- */
+        .why-section { background: var(--white); }
+        .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+        .why-card {
+            padding: 30px 26px; border-radius: var(--radius-md); background: var(--bg);
+            border: 1px solid var(--line); transition: transform .18s ease, box-shadow .18s ease;
         }
+        .why-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -28px rgba(18,59,50,.35); }
+        .why-icon {
+            width: 52px; height: 52px; border-radius: 14px; background: var(--primary);
+            display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+        }
+        .why-card:nth-child(3n+2) .why-icon { background: var(--mint); }
+        .why-card:nth-child(3n) .why-icon { background: var(--gold); }
+        .why-card h3 { font-family: 'Tajawal', sans-serif; font-weight: 700; font-size: 16.5px; color: var(--ink); margin-bottom: 10px; line-height: 1.5; }
+        .why-card p { font-size: 13.8px; color: var(--muted); }
+
+        /* ---------------- SERVICES ---------------- */
+        .service-row {
+            display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 32px;
+            padding: 36px 0; border-top: 1px solid var(--line);
+            transition: background .2s ease; cursor: pointer;
+        }
+        .service-row:last-child { border-bottom: 1px solid var(--line); }
+        .service-row:hover { background: rgba(47,143,114,0.05); }
+        .service-icon {
+            width: 64px; height: 64px; border-radius: 18px; flex: none;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--white); font-size: 1.5rem;
+        }
+        .service-row:nth-child(odd) .service-icon { background: var(--primary); }
+        .service-row:nth-child(even) .service-icon { background: var(--mint); }
+        .service-body h3 { font-size: 19px; color: var(--ink); margin-bottom: 8px; }
+        .service-body p { color: var(--muted); font-size: 14.5px; max-width: 56ch; }
+        .service-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+        .badge {
+            font-size: 12.5px; font-weight: 700; padding: 6px 14px; border-radius: 20px;
+            background: var(--gold); color: var(--primary-2); white-space: nowrap;
+        }
+        .service-link {
+            display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--primary);
+        }
+        .service-link svg { transition: transform .18s ease; }
+        .service-row:hover .service-link svg { transform: translateX(-4px); }
+
+        /* ---------------- REGISTRATION FORM ---------------- */
+        .register-panel {
+            background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg);
+            padding: 44px; box-shadow: 0 30px 60px -40px rgba(18,59,50,.35);
+            max-width: 780px; margin: 0 auto;
+        }
+        .form-control {
+            width: 100%; padding: 14px 18px; margin-bottom: 18px;
+            border-radius: 12px; border: 1.5px solid var(--line); font-size: 15px;
+            font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--ink);
+            transition: border-color .2s ease;
+        }
+        .form-control:focus { outline: none; border-color: var(--mint); background: var(--white); }
+        
+        .role-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+        .role-opt {
+            border: 1.5px solid var(--line); border-radius: 12px; padding: 16px 10px;
+            text-align: center; font-size: 14px; font-weight: 700; color: var(--ink);
+            cursor: pointer; transition: all .2s ease; background: var(--bg);
+        }
+        .role-opt:hover { border-color: var(--mint); }
+        .role-opt.selected { border-color: var(--mint); background: rgba(47,143,114,.08); color: var(--primary); }
+
+        #responseMessage { margin-top: 16px; font-weight: bold; text-align: center; font-size: 15px; }
+
+        /* ---------------- FOOTER ---------------- */
+        footer { background: var(--primary-2); color: var(--white); padding: 64px 0 28px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; margin-bottom: 40px; }
+        footer h5 { color: var(--gold); font-size: 14.5px; font-weight: 700; margin-bottom: 16px; }
+        footer .brand-text { color: var(--white); }
+        footer .brand-text span { color: var(--gold); }
+        footer p.lede { color: #BFD3CC; font-size: 14px; margin-top: 14px; max-width: 48ch; }
+        footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+        footer a { color: #D8E6E1; font-size: 14px; }
+        footer a:hover { color: var(--gold); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,.12); padding-top: 22px; text-align: center; font-size: 12.5px; color: #93A9A2; }
+
+        /* ---------------- CHATBOT STYLES ---------------- */
+        .chat-toggle {
+            position: fixed; bottom: 24px; left: 24px;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: var(--mint); color: var(--white);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; cursor: pointer; z-index: 999;
+            box-shadow: 0 10px 25px rgba(47,143,114,0.4);
+            border: none; transition: transform .2s ease, background .2s ease;
+        }
+        .chat-toggle:hover { transform: scale(1.08); background: var(--mint-hover); }
 
         .chat-widget {
-            position: fixed;
-            bottom: 95px;
-            left: 25px;
-            width: 360px;
-            height: 480px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
+            position: fixed; bottom: 96px; left: 24px;
+            width: 360px; max-width: calc(100vw - 48px); height: 480px;
+            background: var(--white); border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border: 1px solid var(--line);
+            display: none; flex-direction: column; z-index: 1000;
+            overflow: hidden; animation: popIn .25s ease forwards;
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .chat-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: var(--primary); color: var(--white);
+            padding: 16px; display: flex; align-items: center; justify-content: space-between;
         }
+        .chat-header-title { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+        .chat-close { background: none; border: none; color: var(--white); cursor: pointer; font-size: 18px; opacity: 0.8; }
+        .chat-close:hover { opacity: 1; }
 
         .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background-color: #f8fafc;
+            flex: 1; padding: 16px; overflow-y: auto; display: flex;
+            flex-direction: column; gap: 12px; background: var(--bg);
         }
-
         .chat-msg {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 0.92rem;
-            line-height: 1.4;
-            white-space: pre-line;
+            max-width: 82%; padding: 10px 14px; border-radius: 14px;
+            font-size: 13.5px; line-height: 1.5; word-break: break-word;
         }
-
-        .chat-msg.user {
-            align-self: flex-end;
-            background-color: var(--secondary-color);
-            color: white;
-            border-bottom-left-radius: 2px;
-        }
-
         .chat-msg.bot {
-            align-self: flex-start;
-            background-color: #edf2f7;
-            color: #2d3748;
-            border-bottom-right-radius: 2px;
-            border: 1px solid #e2e8f0;
+            align-self: flex-start; background: var(--white); color: var(--ink);
+            border: 1px solid var(--line); border-bottom-right-radius: 4px;
+        }
+        .chat-msg.user {
+            align-self: flex-end; background: var(--mint); color: var(--white);
+            border-bottom-left-radius: 4px;
         }
 
         .chat-input-area {
-            padding: 12px;
-            background: white;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            gap: 8px;
+            padding: 12px; background: var(--white); border-top: 1px solid var(--line);
+            display: flex; gap: 8px;
+        }
+        .chat-input {
+            flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line);
+            font-family: 'Tajawal', sans-serif; font-size: 14px; outline: none;
+        }
+        .chat-input:focus { border-color: var(--mint); }
+        .chat-send {
+            background: var(--mint); color: var(--white); border: none;
+            padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 700;
+        }
+        .chat-send:hover { background: var(--mint-hover); }
+
+        /* ---------------- RESPONSIVE ---------------- */
+        @media (max-width: 880px) {
+            .nav-links { display: none; }
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 32px; }
+            .why-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .service-row { grid-template-columns: auto 1fr; }
+            .service-meta { grid-column: 1/-1; flex-direction: row; justify-content: space-between; margin-top: 14px; }
+            .role-selector { grid-template-columns: 1fr; }
         }
 
-        .chat-input-area input {
-            border-radius: 20px;
+        @media (prefers-reduced-motion: no-preference) {
+            .reveal { opacity: 0; transform: translateY(16px); animation: up .7s ease forwards; }
         }
+        @keyframes up { to { opacity: 1; transform: none; } }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-dark">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Path Engineering 🚀</a>
-        </div>
-    </nav>
+    <!-- HEADER -->
+    <header id="siteHeader">
+        <nav class="wrap">
+            <div class="brand">
+                <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+                    <rect width="34" height="34" rx="9" fill="#123B32"/>
+                    <path d="M8 22L14 14L19 18L26 9" stroke="#D99A3F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="26" cy="9" r="2.4" fill="#D99A3F"/>
+                </svg>
+                <span class="brand-text">PATH <span>ENGINEERING</span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero">الرئيسية</a></li>
+                <li><a href="#why">لماذا نحن</a></li>
+                <li><a href="#services">الخدمات</a></li>
+                <li><a href="#register">التسجيل</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#register" class="btn btn-primary">انضم إلينا</a>
+            </div>
+        </nav>
+    </header>
 
-    <!-- Hero Header -->
-    <div class="hero-section text-center">
-        <div class="container">
-            <h1 class="fw-bold mb-3">منصة Path Engineering للإستشارات والتدريب</h1>
-            <p class="lead mb-0">نربط الطلاب بالمرشدين الأكاديميين والشركات لتسريع التطور المهني والهندسي.</p>
-        </div>
-    </div>
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero">
+        <div class="wrap hero-grid">
+            <div class="reveal">
+                <h1>من التدريب الجامعي<br>إلى الوظيفة الحقيقية</h1>
+                <p class="lede">منصة رقمية تساعد طالب الهندسة على بناء مشاريع تخرجه بنفسه عبر الإرشاد بالساعة، وتتيح للشركات إدارة التدريب والتأهيل التوظيفي بمنظومة واحدة.</p>
+                <div class="hero-actions">
+                    <a href="#register" class="btn btn-primary">سجل الآن</a>
+                    <a href="#services" class="btn btn-outline">تعرف على الخدمات</a>
+                </div>
+            </div>
 
-    <!-- Main Content & Registration Form -->
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card-custom">
-                    <h3 class="mb-4 text-center text-primary-custom fw-bold">استمارة التسجيل والطلب</h3>
-                    
-                    <form id="registrationForm" onsubmit="handleFormSubmit(event)">
-                        <div class="mb-3">
-                            <label for="fullName" class="form-label">الاسم الكامل</label>
-                            <input type="text" class="form-control" id="fullName" placeholder="أدخل اسمك الكامل" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label">البريد الإلكتروني</label>
-                            <input type="email" class="form-control" id="email" placeholder="example@domain.com" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">رقم الهاتف / الواتساب</label>
-                            <input type="tel" class="form-control" id="phone" placeholder="07XXXXXXXX" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="role" class="form-label">صفة التسجيل</label>
-                            <select class="form-select" id="role" required>
-                                <option value="student" selected>طالب / خريج جديد</option>
-                                <option value="mentor">مرشد أكاديمي / مهندس خبير</option>
-                                <option value="company">شركة / جهة تدريب</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="notes" class="form-label">تفاصيل الطلب / الاستفسار</label>
-                            <textarea class="form-control" id="notes" rows="4" placeholder="اكتب تفاصيل مشروعك أو طبيعة الدعم الذي تحتاجه..."></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary-custom w-100 text-white">إرسال الطلب الآن</button>
-                    </form>
-                    <div id="formAlert" class="mt-3"></div>
+            <div class="path-visual reveal" style="display:flex; flex-direction:column; gap:26px;">
+                <div class="path-node done">
+                    <div class="dot"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div><div class="label">تدريب جامعي</div><div class="sub">بداية الرحلة العملية</div></div>
+                </div>
+                <div class="path-node done">
+                    <div class="dot"><i class="fa-solid fa-user-gear"></i></div>
+                    <div><div class="label">مشروع تخرج بإرشاد الساعة</div><div class="sub">بناء المشروع بنفسك</div></div>
+                </div>
+                <div class="path-node">
+                    <div class="dot"><i class="fa-solid fa-briefcase"></i></div>
+                    <div><div class="label">تمديد تدريب 3 أشهر</div><div class="sub">خبرة عملية إضافية</div></div>
+                </div>
+                <div class="path-node">
+                    <div class="dot"><i class="fa-solid fa-building-user"></i></div>
+                    <div><div class="label">وظيفة حقيقية</div><div class="sub">نهاية الرحلة، بداية جديدة</div></div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Chatbot Floating Button -->
-    <button class="chat-toggle-btn" id="chatToggleBtn" title="المساعد الذكي">
-        <i class="fas fa-comments"></i>
+    <!-- WHY US SECTION -->
+    <section class="section why-section" id="why">
+        <div class="wrap">
+            <div class="section-head" style="max-width:680px;">
+                <h2>ليش الطلاب والشركات بيختاروا Path Engineering</h2>
+                <p>مش مجرد منصة تسجيل — منظومة متكاملة ترافقك من أول يوم تدريب لحد ما توقّع عقد التوظيف.</p>
+            </div>
+
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-user-tie" style="color:#fff;"></i></div>
+                    <h3>إرشاد من مهندسين حقيقيين، مش محتوى جاهز</h3>
+                    <p>كل جلسة إرشاد بالساعة مع مهندس عنده خبرة ميدانية فعلية بمجال مشروعك، بيوجهك خطوة بخطوة بدل ما يحل مكانك.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-shield-halved" style="color:#fff;"></i></div>
+                    <h3>مشروع تخرجك ببصمتك، بضمان النزاهة الأكاديمية</h3>
+                    <p>الإرشاد بيساعدك تبني الفكرة وتحل العقبات بنفسك، بدون ما يمس هذا استقلاليتك الأكاديمية أو يشكك بأصالة المشروع.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-handshake" style="color:#fff;"></i></div>
+                    <h3>جسر مباشر من التدريب إلى التوظيف الفعلي</h3>
+                    <p>الطلاب المتميزين ما بضلوا ينتظروا "خبرة عملية" وهمية — برنامج التمديد المهني بيربطهم مباشرة بشركات جاهزة توظفهم.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-chart-line" style="color:#fff;"></i></div>
+                    <h3>متابعة وتقييم يوثّق تقدمك أول بأول</h3>
+                    <p>الشركات بتقدر تراقب أداء المتدرب بمهام واضحة وااختبارات دورية، والطالب بيشوف تقدمه بنفس اللحظة.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-clock" style="color:#fff;"></i></div>
+                    <h3>وقتك إلك — جلسات إرشاد حسب جدولك</h3>
+                    <p>ما في التزام بمواعيد ثابتة تصادم محاضراتك. تقدر تحجز جلسة الإرشاد بالوقت يلي يناسبك، وتشتغل على مشروعك براحتك.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-icon"><i class="fa-solid fa-diagram-project" style="color:#fff;"></i></div>
+                    <h3>للشركات: منظومة واحدة بدل ملفات متفرقة</h3>
+                    <p>نشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء — كله بمكان واحد، بدون إيميلات وملفات إكسل مبعثرة.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="section" id="services" style="background:var(--white);">
+        <div class="wrap">
+            <div class="section-head">
+                <h2>خدمات المنصة الرئيسية</h2>
+                <p>اضغط على أي خدمة للتسجيل والاشتراك المباشر بها.</p>
+            </div>
+
+            <div class="service-row" id="row-company">
+                <div class="service-icon"><i class="fa-solid fa-building-user"></i></div>
+                <div class="service-body">
+                    <h3>إدارة التدريب الميداني والتأهيل</h3>
+                    <p>منظومة موحدة للشركات لنشر فرص التدريب، متابعة المهام، إجراء الاختبارات، وتقييم الأداء.</p>
+                </div>
+                <div class="service-meta">
+                    <span class="badge">للشركات</span>
+                    <span class="service-link">التسجيل كممثل شركة <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+            </div>
+
+            <div class="service-row" id="row-student">
+                <div class="service-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="service-body">
+                    <h3>إرشاد مشروع التخرج (بالساعة)</h3>
+                    <p>جلسات إرشادية وتوجيهية مع خبراء لمساعدة الطالب على بناء مشروعه بنفسه وضمان النزاهة الأكاديمية.</p>
+                </div>
+                <div class="service-meta">
+                    <span class="badge">بالساعة</span>
+                    <span class="service-link">طلب الخدمة كطالب <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+            </div>
+
+            <div class="service-row" id="row-mentor">
+                <div class="service-icon"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="service-body">
+                    <h3>برنامج التمديد المهني (3 أشهر)</h3>
+                    <p>ربط الطلاب المتميزين بشركات لتمديد تدريبهم 3 أشهر إضافية لزيادة فرص التوظيف وتقليل مخاطر التوظيف الجديد.</p>
+                </div>
+                <div class="service-meta">
+                    <span class="badge">للمرشدين والمهندسين</span>
+                    <span class="service-link">الانضمام كمرشد / مهندس <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REGISTRATION SECTION -->
+    <section class="section" id="register">
+        <div class="wrap">
+            <div class="register-panel">
+                <div class="section-head" style="text-align: center; margin-bottom: 32px;">
+                    <h2>استمارة الانضمام والتسجيل</h2>
+                    <p>سجل بياناتك للبدء في الاستفادة من منصة Path Engineering</p>
+                </div>
+
+                <form id="registrationForm">
+                    <input type="text" id="fullName" class="form-control" placeholder="الاسم الكامل" required>
+                    <input type="email" id="email" class="form-control" placeholder="البريد الإلكتروني" required>
+                    
+                    <p style="font-weight: 700; font-size: 14px; margin-bottom: 10px; color: var(--primary);">اختر الفئة:</p>
+                    <div class="role-selector">
+                        <div class="role-opt selected" data-value="student">طالب هندسة</div>
+                        <div class="role-opt" data-value="mentor">مرشد مهني / مهندس</div>
+                        <div class="role-opt" data-value="company">ممثل شركة</div>
+                    </div>
+                    <!-- Hidden Role Input -->
+                    <input type="hidden" id="role" value="student">
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px;">إرسال البيانات</button>
+                </form>
+
+                <div id="responseMessage"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER SECTION -->
+    <footer id="footer">
+        <div class="wrap">
+            <div class="footer-grid">
+                <div>
+                    <div class="brand">
+                        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+                            <rect width="34" height="34" rx="9" fill="#123B32"/>
+                            <path d="M8 22L14 14L19 18L26 9" stroke="#D99A3F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="26" cy="9" r="2.4" fill="#D99A3F"/>
+                        </svg>
+                        <span class="brand-text">PATH <span>ENGINEERING</span></span>
+                    </div>
+                    <p class="lede">منصة تساعد طالب الهندسة على التعلم والتدريب المهني وبناء مشاريع تخرج مميزة.</p>
+                </div>
+
+                <div>
+                    <h5>روابط السريعة</h5>
+                    <ul>
+                        <li><a href="#hero">الرئيسية</a></li>
+                        <li><a href="#services">الخدمات</a></li>
+                        <li><a href="#register">التسجيل</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>جميع الحقوق محفوظة &copy; 2026 - Path Engineering</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CHATBOT WIDGET UI -->
+    <button class="chat-toggle" id="chatToggleBtn" title="المساعد الذكي">
+        <i class="fa-solid fa-comments"></i>
     </button>
 
-    <!-- Chatbot Widget Window -->
     <div class="chat-widget" id="chatWidget">
         <div class="chat-header">
-            <div>
-                <i class="fas fa-robot me-2"></i>
-                <strong>مساعد Path Engineering</strong>
+            <div class="chat-header-title">
+                <i class="fa-solid fa-robot"></i>
+                مساعد Path Engineering
             </div>
-            <button type="button" class="btn-close btn-close-white btn-sm" id="chatCloseBtn"></button>
+            <button class="chat-close" id="chatCloseBtn"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="chat-msg bot">أهلاً بك 👋! أنا المساعد الذكي لمنصة Path Engineering. كيف يمكنني مساعدتك؟ يمكنك سؤالي عن "الكورسات المقترحة"، "طريقة التسجيل"، أو "نصائح لمشروع التخرج".</div>
+            <div class="chat-msg bot">أهلاً بك! 👋 كيف أستطيع مساعدتك اليوم بخصوص منصة Path Engineering؟</div>
         </div>
         <div class="chat-input-area">
-            <input type="text" id="chatInput" class="form-control" placeholder="اكتب سؤالك..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
-            <button class="btn btn-primary-custom text-white px-3" onclick="sendChatMessage()">
-                <i class="fas fa-paper-plane"></i>
-            </button>
+            <input type="text" id="chatInput" class="chat-input" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+            <button class="chat-send" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
-    <!-- JavaScript & Supabase Backend Integration -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // 1. ربط Supabase ببيانات مشروعك المباشرة
-        const SUPABASE_URL = 'https://oagptvvhjvyqvvuvvxkk.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9hZ3B0dnZoanZ5cXZ2dXZ2eGtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY3NDUxOTUsImV4cCI6MjA0MjMyMTE5NX0.S_1i1p-fW3Y4d2V_m4P2s3t_R6u7v8x9y0z1a2b3c4d';
+        // ---------------- SUPABASE INTEGRATION ----------------
+        const SUPABASE_URL = 'https://ogesvdbsgptfifllduyv.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_8SQ-JfcbI2uGBstuTps0ow_hNbaNym8';
         
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // 2. إرسال بيانات الاستمارة وترحيلها لجدول registrations
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-            const alertDiv = document.getElementById('formAlert');
-            alertDiv.innerHTML = '<div class="alert alert-info">جاري إرسال البيانات إلى قاعدة البيانات...</div>';
-
-            const formData = {
-                full_name: document.getElementById('fullName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                role: document.getElementById('role').value,
-                notes: document.getElementById('notes').value
-            };
-
-            try {
-                const { data, error } = await _supabase
-                    .from('registrations')
-                    .insert([formData]);
-
-                if (error) throw error;
-
-                alertDiv.innerHTML = '<div class="alert alert-success">تم حفظ التسجيل في قاعدة البيانات بنجاح! وسنتواصل معك قريباً.</div>';
-                document.getElementById('registrationForm').reset();
-            } catch (err) {
-                console.error('Error submitting form:', err);
-                alertDiv.innerHTML = '<div class="alert alert-danger">حدث خطأ أثناء حفظ البيانات: ' + (err.message || 'تأكد من إعدادات الجدول') + '</div>';
-            }
+        let _supabase = null;
+        if (typeof supabase !== 'undefined') {
+            _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         }
 
-        // 3. التحكم في ظهور وإخفاء الشات بوت
+        // ---------------- ROLE SELECTOR INTERACTION ----------------
+        const roleOpts = document.querySelectorAll('.role-opt');
+        const roleInput = document.getElementById('role');
+
+        roleOpts.forEach(opt => {
+            opt.addEventListener('click', () => {
+                roleOpts.forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                roleInput.value = opt.getAttribute('data-value');
+            });
+        });
+
+        // ---------------- SERVICE ROWS CLICK ACTION ----------------
+        document.getElementById('row-company').addEventListener('click', () => selectRoleAndScroll('company'));
+        document.getElementById('row-student').addEventListener('click', () => selectRoleAndScroll('student'));
+        document.getElementById('row-mentor').addEventListener('click', () => selectRoleAndScroll('mentor'));
+
+        function selectRoleAndScroll(roleValue) {
+            roleOpts.forEach(o => {
+                if (o.getAttribute('data-value') === roleValue) {
+                    o.click();
+                }
+            });
+            document.getElementById('register').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ---------------- FORM SUBMISSION LOGIC ----------------
+        const registrationForm = document.getElementById('registrationForm');
+        const responseMessage = document.getElementById('responseMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        registrationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const role = roleInput.value;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري إرسال البيانات...';
+            responseMessage.textContent = '';
+
+            try {
+                if (_supabase) {
+                    // إرسال البيانات إلى جدول registrations في Supabase
+                    const { data, error } = await _supabase
+                        .from('registrations')
+                        .insert([{ full_name: fullName, email: email, role: role }]);
+
+                    if (error) throw error;
+                } else {
+                    throw new Error('Supabase client is not initialized');
+                }
+                
+                // في حال النجاح
+                responseMessage.style.color = '#2F8F72';
+                responseMessage.textContent = 'تم إرسال بياناتك بنجاح! سنتواصل معك قريباً.';
+                registrationForm.reset();
+                // إعادة تعيين الفئة الافتراضية
+                roleOpts[0].click();
+
+            } catch (err) {
+                console.error(err);
+                responseMessage.style.color = '#d93838';
+                responseMessage.textContent = 'حدث خطأ أثناء الإرسال. يرجى المحاولة لاحقاً.';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'إرسال البيانات';
+            }
+        });
+
+        // ---------------- CHATBOT LOGIC ----------------
         const chatToggleBtn = document.getElementById('chatToggleBtn');
         const chatWidget = document.getElementById('chatWidget');
         const chatCloseBtn = document.getElementById('chatCloseBtn');
 
         chatToggleBtn.addEventListener('click', () => {
-            chatWidget.style.display = (chatWidget.style.display === 'flex') ? 'none' : 'flex';
+            chatWidget.style.display = chatWidget.style.display === 'flex' ? 'none' : 'flex';
         });
 
         chatCloseBtn.addEventListener('click', () => {
             chatWidget.style.display = 'none';
         });
 
-        // 4. قاعدة بيانات الكورسات والتوصيات المخصصة
-        const courseRecommendations = {
-            student: [
-                "📘 كورس أساسيات إدارة مشاريع التخرج الهندسية",
-                "💻 كورس النمذجة والتصميم الهندسي (AutoCAD / Revit / SolidWorks)",
-                "📊 كورس الإعداد للتدريب الميداني وسوق العمل"
-            ],
-            mentor: [
-                "🎓 ورشة عمل: أساليب الإرشاد الأكاديمي والمهني الحديث",
-                "🤝 كيفية تقييم مشاريع التخرج وتوجيه الطلاب"
-            ],
-            company: [
-                "🏢 دليل إدارة برامج التدريب الميداني وتقييم الأداء",
-                "🚀 استراتيجيات استقطاب المواهب الهندسية الشابة"
-            ]
-        };
-
-        // 5. إرسال الرد وحفظ المحادثة في جدول chat_history
-        async function sendChatMessage() {
+        function sendChatMessage() {
             const input = document.getElementById('chatInput');
-            const userMessage = input.value.trim();
-            if (!userMessage) return;
+            const text = input.value.trim();
+            if (!text) return;
 
-            appendMessage(userMessage, 'user');
+            appendMessage(text, 'user');
             input.value = '';
 
-            const loadingMsgId = appendMessage('جاري تحليل الطلب والرد...', 'bot');
-
-            try {
-                const currentRole = document.getElementById('role') ? document.getElementById('role').value : 'student';
-                const userName = document.getElementById('fullName') ? document.getElementById('fullName').value.trim() : '';
-
-                const botReply = generateSmartReply(userMessage, currentRole, userName);
-                updateMessage(loadingMsgId, botReply);
-
-                // حفظ السؤال والجواب في جدول chat_history
-                await _supabase
-                    .from('chat_history')
-                    .insert([{ 
-                        user_message: userMessage, 
-                        bot_response: botReply 
-                    }]);
-
-            } catch (err) {
-                console.error('Error in chatbot:', err);
-                updateMessage(loadingMsgId, 'حدث خطأ أثناء معالجة الطلب.');
-            }
+            setTimeout(() => {
+                const reply = getBotReply(text);
+                appendMessage(reply, 'bot');
+            }, 500);
         }
 
-        // 6. منطق الرد الذكي واقتراح الكورسات والنصائح
-        function generateSmartReply(query, role, name) {
-            const q = query.toLowerCase();
-            const displayName = name ? `يا ${name}` : '';
-
-            if (q.includes('كورس') || q.includes('دورات') || q.includes('ترشيح') || q.includes('نصيحة') || q.includes('مقترح')) {
-                let courses = courseRecommendations[role] || courseRecommendations['student'];
-                let reply = `أهلاً بك ${displayName}! 💡 بناءً على فئتك كـ (${role === 'student' ? 'طالب' : role === 'company' ? 'شركة' : 'مرشد'})، نوصيك بالمسارات التالية:\n\n`;
-                courses.forEach(c => reply += `• ${c}\n`);
-                reply += `\n📌 **نصيحة:** احرص على تحديد نطاق عمل مشروعك مبكراً وحجز جلسة إرشادية لربط المفهوم النظري بالتطبيق العملي.`;
-                return reply;
-            }
-
-            if (q.includes('سجل') || q.includes('تسجيل') || q.includes('اشترك')) {
-                return `أهلاً ${displayName}! يمكنك ملء استمارة التسجيل الموضحة في الصفحة واختيار صفة التسجيل وسنتواصل معك فوراً.`;
-            } 
-
-            if (q.includes('مرحبا') || q.includes('هلا') || q.includes('hi') || q.includes('السلام')) {
-                return `أهلاً وسهلاً بك ${displayName}! 👋 كيف يمكنني مساعدتك اليوم؟ يمكنك كتابة "اقترح علي كورسات" للاطلاع على الدورات الموصى بها.`;
-            }
-
-            if (q.includes('مشروع') || q.includes('تخرج') || q.includes('ارشاد') || q.includes('إرشاد')) {
-                return `خدمة إرشاد المشاريع تتيح لك العمل المباشر مع خبراء مهندسين. هل ترغب في الاطلاع على الكورسات المساعدة لمشروعك؟ اكتب "اقترح علي كورسات".`;
-            }
-
-            return `شكراً لتواصلك معنا ${displayName}! يسعدنا تقديم الدعم الكامل لك. يمكنك طلب "اقترح علي كورسات" لتوصية أفضل الدورات والمسارات لك.`;
-        }
-
-        // دوال مساعدة لطباعة الرسائل
         function appendMessage(text, side) {
             const container = document.getElementById('chatMessages');
             const msg = document.createElement('div');
-            const id = 'msg-' + Date.now();
-            msg.id = id;
             msg.className = `chat-msg ${side}`;
-            msg.innerText = text;
+            msg.textContent = text;
             container.appendChild(msg);
             container.scrollTop = container.scrollHeight;
-            return id;
         }
 
-        function updateMessage(id, newText) {
-            const msg = document.getElementById(id);
-            if (msg) msg.innerText = newText;
+        function getBotReply(query) {
+            const q = query.toLowerCase();
+            
+            if (q.includes('سجل') || q.includes('تسجيل') || q.includes('كيف اشترك') || q.includes('انضمام')) {
+                return 'يمكنك التسجيل بسهولة من خلال استمارة الانضمام المتاحة في أسفل الصفحة. اختر فئتك (طالب، مرشد، أو شركة) وعبّئ بياناتك!';
+            } else if (q.includes('خدمات') || q.includes('ماذا تقدمون') || q.includes('خدمة')) {
+                return 'نقدم 3 خدمات رئيسية: 1. إدارة التدريب الميداني للشركات، 2. إرشاد مشاريع التخرج بالساعة، 3. برنامج التمديد المهني للطلاب المتميزين.';
+            } else if (q.includes('مشروع') || q.includes('تخرج') || q.includes('ارشاد') || q.includes('إرشاد')) {
+                return 'خدمة إرشاد مشاريع التخرج تتيح لك حجز جلسات بالساعة مع مهندسين خبراء لمساعدتك في بناء مشروعك بنفسك وبضمان النزاهة الأكاديمية.';
+            } else if (q.includes('شركة') || q.includes('شركات') || q.includes('تدريب ميداني')) {
+                return 'تساعد المنصة الشركات في إدارة التدريب الميداني ومتابعة المهام والاختبارات وتقييم المتدربين عبر لوحة تحكم موحدة.';
+            } else if (q.includes('سعر') || q.includes('تلفة') || q.includes('أسعار') || q.includes('تكلفة')) {
+                return 'تختلف التكلفة حسب نوع الخدمة وعدد ساعات الإرشاد المطلوبة. يمكنك التسجيل وسيتم التواصل معك بتفاصيل الباقات.';
+            } else if (q.includes('مرحبا') || q.includes('هلا') || q.includes('السلام')) {
+                return 'أهلاً بك! كيف يمكنني مساعدتك في منصة Path Engineering اليوم؟';
+            } else {
+                return 'شكراً لتوصلك معنا! للحصول على تفاصيل أكثر أو استفسارات خاصة، يمكنك ملء استمارة التسجيل وسيتواصل معك فريقنا مباشرة.';
+            }
         }
     </script>
 </body>
